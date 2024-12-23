@@ -1,7 +1,7 @@
-import { exec } from "node:child_process";
 import path from "node:path";
 import { BrowserWindow, app, ipcMain } from "electron";
 import started from "electron-squirrel-startup";
+import { getGitVersion } from "./git/git-version";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -39,11 +39,7 @@ const createWindow = () => {
 app.on("ready", createWindow);
 
 ipcMain.handle("git-version", async () => {
-	const version = await new Promise((res) => {
-		exec("git --version", (error, stdout, stderr) => {
-			res(stdout ?? stderr ?? "no output");
-		});
-	});
+	const version = await getGitVersion();
 	return version;
 });
 

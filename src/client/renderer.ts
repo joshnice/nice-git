@@ -3,7 +3,9 @@ import "./index.css";
 const gitVersionButton = document.getElementById("git-version-button");
 const gitVersionText = document.getElementById("git-version-text");
 
-gitVersionButton.addEventListener("click", async () => {
+gitVersionButton?.addEventListener("click", async () => {
 	const res = await gitApi.getVersion();
-	gitVersionText.innerHTML += res;
+	if (gitVersionText) {
+		gitVersionText.innerHTML += res;
+	}
 });
