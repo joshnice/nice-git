@@ -1,6 +1,7 @@
 import path from "node:path";
 import { BrowserWindow, app, ipcMain } from "electron";
 import started from "electron-squirrel-startup";
+import { getGitBranches } from "./git/git-branches";
 import { getGitVersion } from "./git/git-version";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -41,6 +42,11 @@ app.on("ready", createWindow);
 ipcMain.handle("git-version", async () => {
 	const version = await getGitVersion();
 	return version;
+});
+
+ipcMain.handle("git-branches", async () => {
+	const branches = await getGitBranches();
+	return branches;
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
