@@ -1,17 +1,20 @@
 import path from "node:path";
-import { BrowserWindow, app, ipcMain } from "electron";
+import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import started from "electron-squirrel-startup";
 import { getGitBranches } from "./git/git-branches";
 import { getGitVersion } from "./git/git-version";
+import { chooseRepoLocation } from "./repo/repo-location";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
 	app.quit();
 }
 
+let mainWindow: BrowserWindow;
+
 const createWindow = () => {
 	// Create the browser window.
-	const mainWindow = new BrowserWindow({
+	mainWindow = new BrowserWindow({
 		width: 1200,
 		height: 800,
 		webPreferences: {
@@ -38,6 +41,11 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", createWindow);
+
+ipcMain.handle("choose-repo-location", async () => {
+	const selection = await chooseRepoLocation(mainWindow);
+	return selection;
+});
 
 ipcMain.handle("git-version", async () => {
 	const version = await getGitVersion();
