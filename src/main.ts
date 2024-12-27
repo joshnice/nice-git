@@ -52,8 +52,8 @@ ipcMain.handle("git-version", async () => {
 	return version;
 });
 
-ipcMain.handle("git-branches", async () => {
-	const branches = await getGitBranches();
+ipcMain.handle("git-branches", async (event, repoLocation: string) => {
+	const branches = await getGitBranches(repoLocation);
 	return branches;
 });
 
