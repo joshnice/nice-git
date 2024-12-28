@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { isRepoLocationFailure } from "../../types/repo-location-types";
+import { TabBarComponent } from "../components/tab-bar";
 import {
 	repoStore,
-	useRepoLocation,
 	useRepoLocationError,
+	useSelectedRepo,
 } from "../state/repo-store";
 
 export function HomePage() {
@@ -15,20 +16,28 @@ export function HomePage() {
 
 	const { data: repoLocations } = useQuery({
 		queryKey: ["repo-locations"],
-		queryFn: window.repoApi.getRepoLocations,
+		queryFn: async () => {
+			const repoLocations = await window.repoApi.getRepoLocations();
+			console.log("setRepoLocation", repoLocations);
+			repoStore.send({
+				type: "setSelectedRepo",
+				selectedRepo: repoLocations[0],
+			});
+			return repoLocations;
+		},
 	});
 
-	const repoLocation = useRepoLocation();
 	const repoLocationError = useRepoLocationError();
+	const selectedRepo = useSelectedRepo();
 
 	const { data: gitBranches } = useQuery({
-		queryKey: ["git-branches", repoLocation],
-		enabled: repoLocation != null,
+		queryKey: ["git-branches", selectedRepo],
+		enabled: selectedRepo != null,
 		queryFn: async () => {
-			if (repoLocation == null) {
+			if (selectedRepo == null) {
 				throw new Error();
 			}
-			const res = window.gitApi.getBranches(repoLocation);
+			const res = window.gitApi.getBranches(selectedRepo);
 			return res;
 		},
 	});
@@ -46,9 +55,20 @@ export function HomePage() {
 		await window.repoApi.deleteRepoLocations();
 	};
 
+	const handleTabClicked = (tab: string) => {
+		repoStore.send({ type: "setSelectedRepo", selectedRepo: tab });
+	};
+
 	return (
 		<div className="p-5">
 			<h1 className="text-3xl font-bold underline">Nice git</h1>
+			{repoLocations != null && selectedRepo != null && (
+				<TabBarComponent
+					tabs={repoLocations}
+					selectedTab={selectedRepo}
+					onTabClicked={handleTabClicked}
+				/>
+			)}
 			<p>Git version: {gitVersion}</p>
 			<p>Git branches</p>
 			{gitBranches?.map((branch) => (
@@ -57,10 +77,6 @@ export function HomePage() {
 			<button type="button" onClick={handleChooseRepoLocation}>
 				Choose repo location
 			</button>
-			<p>Repo location: {repoLocation}</p>
-			{repoLocationError && (
-				<p style={{ color: "red" }}>Repo location error: {repoLocationError}</p>
-			)}
 			<p>Repo locations</p>
 			{repoLocations?.map((location) => (
 				<p key={location}>{location}</p>

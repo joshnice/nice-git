@@ -4,14 +4,13 @@ import type { RepoLocationFailure } from "../../types/repo-location-types";
 
 export const repoStore = createStore({
 	context: {
-		repoLocation: null as string | null,
 		repoLocationError: null as RepoLocationFailure | null,
+		selectedRepo: null as string | null,
 	},
 	on: {
-		setRepoLocation: (context, event: { location: string }) => {
+		setSelectedRepo: (context, event: { selectedRepo: string }) => {
 			return {
-				repoLocation: event.location,
-				repoLocationError: null,
+				selectedRepo: event.selectedRepo,
 			};
 		},
 		setRepoLocationError: (context, event: { error: RepoLocationFailure }) => {
@@ -23,18 +22,18 @@ export const repoStore = createStore({
 	},
 });
 
-export function useRepoLocation() {
-	const repoLocation = useSelector(
-		repoStore,
-		(state) => state.context.repoLocation,
-	);
-	return repoLocation;
-}
-
 export function useRepoLocationError() {
 	const repoError = useSelector(
 		repoStore,
 		(state) => state.context.repoLocationError,
 	);
 	return repoError;
+}
+
+export function useSelectedRepo() {
+	const selectedRepo = useSelector(
+		repoStore,
+		(state) => state.context.selectedRepo,
+	);
+	return selectedRepo;
 }
