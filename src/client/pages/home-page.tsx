@@ -10,7 +10,7 @@ import {
 export function HomePage() {
 	const { data: gitVersion } = useQuery({
 		queryKey: ["git-version"],
-		queryFn: gitApi.getVersion,
+		queryFn: window.gitApi.getVersion,
 	});
 
 	const repoLocation = useRepoLocation();
@@ -20,13 +20,16 @@ export function HomePage() {
 		queryKey: ["git-branches", repoLocation],
 		enabled: repoLocation != null,
 		queryFn: async () => {
-			const res = gitApi.getBranches(repoLocation);
+			if (repoLocation == null) {
+				throw new Error();
+			}
+			const res = window.gitApi.getBranches(repoLocation);
 			return res;
 		},
 	});
 
 	const handleChooseRepoLocation = async () => {
-		const res = await repoApi.selectRepoLocation();
+		const res = await window.repoApi.selectRepoLocation();
 		if (isRepoLocationFailure(res)) {
 			repoStore.send({ type: "setRepoLocationError", error: res });
 		} else {

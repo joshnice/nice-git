@@ -14,5 +14,5 @@
 		"resolveJsonModule": true,
 		"jsx": "react-jsx"
 	},
-	"include": ["./global.d.ts"]
+	"include": ["./global.d.ts", "./src/**/*"]
 }
