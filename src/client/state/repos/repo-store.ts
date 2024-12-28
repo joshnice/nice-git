@@ -1,6 +1,6 @@
 import { createStore } from "@xstate/store";
 import { useSelector } from "@xstate/store/react";
-import type { RepoLocationFailure } from "../../types/repo-location-types";
+import type { RepoLocationFailure } from "../../../types/repo-location-types";
 
 export const repoStore = createStore({
 	context: {
@@ -15,7 +15,6 @@ export const repoStore = createStore({
 		},
 		setRepoLocationError: (context, event: { error: RepoLocationFailure }) => {
 			return {
-				repoLocation: null,
 				repoLocationError: event.error,
 			};
 		},
