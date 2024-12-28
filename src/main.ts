@@ -4,6 +4,10 @@ import started from "electron-squirrel-startup";
 import { deleteUserFile } from "./app-data/delete-file";
 import { readUserFile } from "./app-data/read-file";
 import { getGitBranches } from "./git/git-branches";
+import {
+	getSelectedBranch,
+	setSelectedBranch,
+} from "./git/git-selected-branch";
 import { getGitVersion } from "./git/git-version";
 import { chooseRepoLocation, getRepoLocations } from "./repo/repo-location";
 
@@ -67,6 +71,19 @@ ipcMain.handle("git-branches", async (event, repoLocation: string) => {
 	const branches = await getGitBranches(repoLocation);
 	return branches;
 });
+
+ipcMain.handle("git-selected-branch", async (event, repoLocation: string) => {
+	const branches = await getSelectedBranch(repoLocation);
+	return branches;
+});
+
+ipcMain.handle(
+	"git-set-selected-branch",
+	async (event, repoLocation: string, branchName: string) => {
+		console.log("git-set-selected-branch", repoLocation, branchName);
+		await setSelectedBranch(repoLocation, branchName);
+	},
+);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

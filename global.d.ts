@@ -4,9 +4,12 @@ declare global {
 	interface Window {
 		gitApi: {
 			getVersion: () => Promise<string>;
-			getBranches: (
+			getBranches: (location: string) => Promise<string[]>;
+			getSelectedBranch: (location: string) => Promise<string>;
+			setSelectedBranch: (
 				location: string,
-			) => Promise<{ name: string; selected: boolean }[]>;
+				branchName: string,
+			) => Promise<void>;
 		};
 		repoApi: {
 			selectRepoLocation: () => Promise<string | RepoLocationFailure>;

@@ -10,12 +10,7 @@ export async function getGitBranches(repoLocation: string) {
 			if (branchName === "") {
 				return [];
 			}
-			return [
-				{
-					name: branchName.replace("\n", "").replace("*", ""),
-					selected: branchName.includes("*"),
-				},
-			];
+			return [branchName.replace("\n", "").replace("*", "")];
 		});
 		return selectedStatusBranches;
 	} catch (err) {

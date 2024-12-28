@@ -19,4 +19,14 @@ contextBridge.exposeInMainWorld("gitApi", {
 	getBranches: (repoLocation: string) => {
 		return ipcRenderer.invoke("git-branches", repoLocation);
 	},
+	getSelectedBranch: (repoLocation: string) => {
+		return ipcRenderer.invoke("git-selected-branch", repoLocation);
+	},
+	setSelectedBranch: (repoLocation: string, branchName: string) => {
+		return ipcRenderer.invoke(
+			"git-set-selected-branch",
+			repoLocation,
+			branchName,
+		);
+	},
 });
