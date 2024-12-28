@@ -46,11 +46,9 @@ export function HomePage() {
 		await window.repoApi.deleteRepoLocations();
 	};
 
-	console.log("repoLocations", repoLocations);
-
 	return (
-		<div>
-			<h1>Nice git</h1>
+		<div className="p-5">
+			<h1 className="text-3xl font-bold underline">Nice git</h1>
 			<p>Git version: {gitVersion}</p>
 			<p>Git branches</p>
 			{gitBranches?.map((branch) => (
