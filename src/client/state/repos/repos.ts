@@ -1,18 +1,30 @@
-import { useQuery } from "@tanstack/react-query";
-import { repoStore } from "./repo-store";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { repoStore, useSelectedRepo } from "./repo-store";
 
 export function useRepos() {
+	const queryClient = useQueryClient();
+
+	const selectedRepo = useSelectedRepo();
+
 	const { data: repos } = useQuery({
-		queryKey: ["repo-locations"],
+		queryKey: ["repos"],
 		queryFn: async () => {
 			const repoLocations = await window.repoApi.getRepoLocations();
-			repoStore.send({
-				type: "setSelectedRepo",
-				selectedRepo: repoLocations[0],
-			});
+			if (selectedRepo == null) {
+				repoStore.send({
+					type: "setSelectedRepo",
+					selectedRepo: repoLocations[0],
+				});
+			}
 			return repoLocations;
 		},
 	});
 
-	return repos;
+	const invalidateRepos = () => {
+		queryClient.invalidateQueries({
+			queryKey: ["repos"],
+		});
+	};
+
+	return { repos, invalidateRepos };
 }

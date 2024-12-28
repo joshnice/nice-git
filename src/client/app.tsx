@@ -1,8 +1,9 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { HomePage } from "./pages/home-page";
 import "./index.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./font-awesome/library";
 
 const root = createRoot(document.body);
 root.render(<RootComponent />);
