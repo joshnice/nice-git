@@ -1,9 +1,11 @@
 import path from "node:path";
 import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import started from "electron-squirrel-startup";
+import { deleteUserFile } from "./app-data/delete-file";
+import { readUserFile } from "./app-data/read-file";
 import { getGitBranches } from "./git/git-branches";
 import { getGitVersion } from "./git/git-version";
-import { chooseRepoLocation } from "./repo/repo-location";
+import { chooseRepoLocation, getRepoLocations } from "./repo/repo-location";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -45,6 +47,15 @@ app.on("ready", createWindow);
 ipcMain.handle("choose-repo-location", async () => {
 	const selection = await chooseRepoLocation(mainWindow);
 	return selection;
+});
+
+ipcMain.handle("delete-repo-locations", async () => {
+	await deleteUserFile("user-repo-locations");
+});
+
+ipcMain.handle("get-repo-locations", async () => {
+	const locations = getRepoLocations();
+	return locations;
 });
 
 ipcMain.handle("git-version", async () => {

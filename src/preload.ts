@@ -4,6 +4,12 @@ contextBridge.exposeInMainWorld("repoApi", {
 	selectRepoLocation: () => {
 		return ipcRenderer.invoke("choose-repo-location");
 	},
+	getRepoLocations: () => {
+		return ipcRenderer.invoke("get-repo-locations");
+	},
+	deleteRepoLocations: () => {
+		return ipcRenderer.invoke("delete-repo-locations");
+	},
 });
 
 contextBridge.exposeInMainWorld("gitApi", {

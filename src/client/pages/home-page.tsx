@@ -13,6 +13,11 @@ export function HomePage() {
 		queryFn: window.gitApi.getVersion,
 	});
 
+	const { data: repoLocations } = useQuery({
+		queryKey: ["repo-locations"],
+		queryFn: window.repoApi.getRepoLocations,
+	});
+
 	const repoLocation = useRepoLocation();
 	const repoLocationError = useRepoLocationError();
 
@@ -37,7 +42,11 @@ export function HomePage() {
 		}
 	};
 
-	console.log("gitBranches", gitBranches);
+	const handleDeleteRepoLocations = async () => {
+		await window.repoApi.deleteRepoLocations();
+	};
+
+	console.log("repoLocations", repoLocations);
 
 	return (
 		<div>
@@ -54,6 +63,13 @@ export function HomePage() {
 			{repoLocationError && (
 				<p style={{ color: "red" }}>Repo location error: {repoLocationError}</p>
 			)}
+			<p>Repo locations</p>
+			{repoLocations?.map((location) => (
+				<p key={location}>{location}</p>
+			))}
+			<button type="button" onClick={handleDeleteRepoLocations}>
+				Delete repo locations
+			</button>
 		</div>
 	);
 }

@@ -1,5 +1,7 @@
 import { existsSync } from "node:fs";
 import { type BrowserWindow, dialog } from "electron";
+import { readUserFile } from "../app-data/read-file";
+import { addToUserFile } from "../app-data/write-file";
 import { RepoLocationFailure } from "../types/repo-location-types";
 
 export async function chooseRepoLocation(
@@ -24,10 +26,21 @@ export async function chooseRepoLocation(
 		return RepoLocationFailure.GitNotIntialised;
 	}
 
+	const filePathToSave = `${selectedFilePath},`;
+	await addToUserFile("user-repo-locations", filePathToSave);
+
 	return selectedFilePath;
 }
 
 function checkDirectoryHasGit(filePath: string) {
 	const gitFilePath = `${filePath}/.git`;
 	return existsSync(gitFilePath);
+}
+
+export async function getRepoLocations() {
+	const locations = await readUserFile("user-repo-locations");
+	if (locations == null) {
+		return [];
+	}
+	return locations.split(",").filter((loc) => loc !== "");
 }
