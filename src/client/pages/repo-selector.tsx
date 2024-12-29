@@ -58,6 +58,15 @@ export function RepoSelectorComponent() {
 				}
 				onClick={addRepo}
 			/>
+			<IconButtonComponent
+				icon={
+					<FontAwesomeIcon icon={["fas", "trash-can"]} color="red" size="2x" />
+				}
+				hoverIcon={
+					<FontAwesomeIcon icon={["fas", "trash-can"]} color="blue" size="2x" />
+				}
+				onClick={addRepo}
+			/>
 		</div>
 	);
 }
