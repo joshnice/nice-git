@@ -20,8 +20,8 @@ export function useRepos() {
 		},
 	});
 
-	const invalidateRepos = () => {
-		queryClient.invalidateQueries({
+	const invalidateRepos = async () => {
+		await queryClient.invalidateQueries({
 			queryKey: ["repos"],
 		});
 	};

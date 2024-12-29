@@ -9,6 +9,7 @@ import {
 	setSelectedBranch,
 } from "./git/git-selected-branch";
 import { getGitVersion } from "./git/git-version";
+import { deleteRepo } from "./repo/repo-delete";
 import { chooseRepoLocation, getRepoLocations } from "./repo/repo-location";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -53,8 +54,8 @@ ipcMain.handle("choose-repo-location", async () => {
 	return selection;
 });
 
-ipcMain.handle("delete-repo-locations", async () => {
-	await deleteUserFile("user-repo-locations");
+ipcMain.handle("delete-repo-location", async (event, repoName: string) => {
+	await deleteRepo(repoName);
 });
 
 ipcMain.handle("get-repo-locations", async () => {

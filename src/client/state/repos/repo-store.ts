@@ -13,6 +13,11 @@ export const repoStore = createStore({
 				selectedRepo: event.selectedRepo,
 			};
 		},
+		clearSelectedRepo: () => {
+			return {
+				selectedRepo: null,
+			};
+		},
 		setRepoLocationError: (context, event: { error: RepoLocationFailure }) => {
 			return {
 				repoLocationError: event.error,

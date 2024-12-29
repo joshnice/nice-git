@@ -14,7 +14,7 @@ declare global {
 		repoApi: {
 			selectRepoLocation: () => Promise<string | RepoLocationFailure>;
 			getRepoLocations: () => Promise<string[]>;
-			deleteRepoLocations: () => Promise<void>;
+			deleteRepoLocation: (repoName: string) => Promise<void>;
 		};
 	}
 }

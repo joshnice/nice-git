@@ -14,18 +14,12 @@ export function HomePage() {
 	const repoLocationError = useRepoLocationError();
 	const selectedRepo = useSelectedRepo();
 
-	const handleDeleteRepoLocations = async () => {
-		await window.repoApi.deleteRepoLocations();
-	};
-
 	return (
 		<div className="p-5 flex flex-col gap-2 overflow-hidden">
 			<h1 className="text-3xl font-bold underline">Nice git</h1>
 			<RepoSelectorComponent />
+			<h2>{selectedRepo}</h2>
 			<BranchesSelectorComponent />
-			<button type="button" onClick={handleDeleteRepoLocations}>
-				Delete repo locations
-			</button>
 		</div>
 	);
 }

@@ -24,9 +24,18 @@ export function RepoSelectorComponent() {
 			repoStore.send({ type: "setRepoLocationError", error: res });
 		} else {
 			invalidateRepos();
-			console.log("addRepo", res);
 			repoStore.send({ type: "setSelectedRepo", selectedRepo: res });
 		}
+	};
+
+	const deleteRepo = async () => {
+		if (selectedRepo == null) {
+			throw new Error();
+		}
+
+		repoStore.send({ type: "clearSelectedRepo" });
+		await window.repoApi.deleteRepoLocation(selectedRepo);
+		await invalidateRepos();
 	};
 
 	const parsedRepoNames = repos?.map(convertRepoLocationToRepoName) ?? [];
@@ -65,7 +74,7 @@ export function RepoSelectorComponent() {
 				hoverIcon={
 					<FontAwesomeIcon icon={["fas", "trash-can"]} color="blue" size="2x" />
 				}
-				onClick={addRepo}
+				onClick={deleteRepo}
 			/>
 		</div>
 	);

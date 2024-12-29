@@ -7,8 +7,8 @@ contextBridge.exposeInMainWorld("repoApi", {
 	getRepoLocations: () => {
 		return ipcRenderer.invoke("get-repo-locations");
 	},
-	deleteRepoLocations: () => {
-		return ipcRenderer.invoke("delete-repo-locations");
+	deleteRepoLocation: (repoName: string) => {
+		return ipcRenderer.invoke("delete-repo-location", repoName);
 	},
 });
 
