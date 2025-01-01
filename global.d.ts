@@ -1,3 +1,4 @@
+import type { GitCommit } from "./src/git/git-types";
 import type { RepoLocationFailure } from "./src/types/repo-location-types";
 
 declare global {
@@ -10,6 +11,7 @@ declare global {
 				location: string,
 				branchName: string,
 			) => Promise<void>;
+			getCommits: (location: string) => Promise<GitCommit[]>;
 		};
 		repoApi: {
 			selectRepoLocation: () => Promise<string | RepoLocationFailure>;

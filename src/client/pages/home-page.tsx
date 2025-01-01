@@ -7,6 +7,7 @@ import {
 	useRepoLocationError,
 	useSelectedRepo,
 } from "../state/repos/repo-store";
+import { BranchCommitsComponent } from "./branch-commits";
 import { BranchesSelectorComponent } from "./branches-selector";
 import { RepoSelectorComponent } from "./repo-selector";
 
@@ -20,6 +21,7 @@ export function HomePage() {
 			<RepoSelectorComponent />
 			<h2>{selectedRepo}</h2>
 			<BranchesSelectorComponent />
+			<BranchCommitsComponent />
 		</div>
 	);
 }

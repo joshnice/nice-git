@@ -29,4 +29,7 @@ contextBridge.exposeInMainWorld("gitApi", {
 			branchName,
 		);
 	},
+	getCommits: (repoLocation: string) => {
+		return ipcRenderer.invoke("git-get-commits", repoLocation);
+	},
 });
