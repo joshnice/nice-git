@@ -4,12 +4,20 @@ import { useClickAwayListener } from "../hooks/use-click-away-listener";
 import { useWindowSizeChange } from "../hooks/use-window-size-change";
 import { IconButtonComponent } from "./icon-button";
 
-interface OverFlowMenuProps {
-	items: string[];
+interface BaseItem {
+	id: string;
+	name: string;
+}
+
+interface OverFlowMenuProps<TItem extends BaseItem> {
+	items: TItem[];
 	onClick: (item: string) => void;
 }
 
-export function OverFlowMenuComponent({ items, onClick }: OverFlowMenuProps) {
+export function OverFlowMenuComponent<TItem extends BaseItem>({
+	items,
+	onClick,
+}: OverFlowMenuProps<TItem>) {
 	const [showOverFlowMenu, setShowOverFlowMenu] = useState(false);
 	const [position, setPosition] = useState<{
 		left: number;
@@ -57,11 +65,11 @@ export function OverFlowMenuComponent({ items, onClick }: OverFlowMenuProps) {
 					{items.map((item) => (
 						<button
 							className="overflow-hidden whitespace-nowrap overflow-ellipsis w-full text-left hover:bg-sky-200 p-2"
-							key={item}
-							onClick={() => onClick(item)}
+							key={item.id}
+							onClick={() => onClick(item.id)}
 							type="button"
 						>
-							{item}
+							{item.name}
 						</button>
 					))}
 				</div>

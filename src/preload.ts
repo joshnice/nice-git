@@ -1,14 +1,20 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("repoApi", {
-	selectRepoLocation: () => {
-		return ipcRenderer.invoke("choose-repo-location");
+	addRepo: () => {
+		return ipcRenderer.invoke("add-repo");
 	},
-	getRepoLocations: () => {
-		return ipcRenderer.invoke("get-repo-locations");
+	getRepos: () => {
+		return ipcRenderer.invoke("get-repos");
 	},
-	deleteRepoLocation: (repoName: string) => {
-		return ipcRenderer.invoke("delete-repo-location", repoName);
+	deleteRepo: (repoId: string) => {
+		return ipcRenderer.invoke("delete-repo", repoId);
+	},
+	setSelectedRepo: (repoId: string) => {
+		return ipcRenderer.invoke("set-selected-repo", repoId);
+	},
+	getSelectedRepo: () => {
+		return ipcRenderer.invoke("get-selected-repo");
 	},
 });
 

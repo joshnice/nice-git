@@ -1,3 +1,4 @@
+import type { Repo } from "../types/repo-type";
 import type { GitCommit } from "./src/git/git-types";
 import type { RepoLocationFailure } from "./src/types/repo-location-types";
 
@@ -14,9 +15,11 @@ declare global {
 			getCommits: (location: string) => Promise<GitCommit[]>;
 		};
 		repoApi: {
-			selectRepoLocation: () => Promise<string | RepoLocationFailure>;
-			getRepoLocations: () => Promise<string[]>;
-			deleteRepoLocation: (repoName: string) => Promise<void>;
+			addRepo: () => Promise<Repo | RepoLocationFailure>;
+			deleteRepo: (repoId: string) => Promise<void>;
+			getRepos: () => Promise<Repo[]>;
+			getSelectedRepo: () => Promise<string | null>;
+			setSelectedRepo: (repoName: string) => Promise<string>;
 		};
 	}
 }

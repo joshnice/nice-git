@@ -1,3 +1,6 @@
+import { LAST_SELECTED_REPO } from "../app-data/file-names";
+import { readUserFile } from "../app-data/read-file";
+import { overwriteFile } from "../app-data/write-file";
 import { executeCommand } from "../node/cli";
 
 export async function getSelectedBranch(repoLocation: string) {
@@ -17,7 +20,6 @@ export async function setSelectedBranch(
 	branchName: string,
 ) {
 	try {
-		console.log(`cd ${repoLocation} && git checkout ${branchName}`);
 		await executeCommand<string>(
 			`cd ${repoLocation} && git checkout ${branchName}`,
 		);

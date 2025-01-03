@@ -3,19 +3,24 @@ import { useEffect, useRef, useState } from "react";
 import { IconButtonComponent } from "./icon-button";
 import { OverFlowMenuComponent } from "./overflow-menu";
 
-interface TabBarProps {
-	tabs: string[];
-	selectedTab: string;
-	onTabClicked: (tabName: string) => void;
+interface BaseTabs {
+	id: string;
+	name: string;
+}
+
+interface TabBarProps<TTabs extends BaseTabs> {
+	tabs: TTabs[];
+	selectedTabId: string;
+	onTabClicked: (tabId: string) => void;
 }
 
 const REPO_TAB_SIZE_PX = 192;
 
-export function TabBarComponent({
+export function TabBarComponent<TTabs extends BaseTabs>({
 	tabs,
-	selectedTab,
+	selectedTabId,
 	onTabClicked,
-}: TabBarProps) {
+}: TabBarProps<TTabs>) {
 	const handleTabClicked = (tabName: string) => {
 		onTabClicked(tabName);
 	};
@@ -43,11 +48,11 @@ export function TabBarComponent({
 			{tabsToShow.map((tab, index) => (
 				<button
 					type="button"
-					onClick={() => onTabClicked(tab)}
-					className={`border-2  ${selectedTab === tab ? "bg-red-500" : "bg-white"} h-9 w-48 flex-nowrap overflow-ellipsis overflow-hidden text-lg`}
-					key={tab}
+					onClick={() => onTabClicked(tab.id)}
+					className={`border-2  ${selectedTabId === tab.id ? "bg-red-500" : "bg-white"} h-9 w-48 flex-nowrap overflow-ellipsis overflow-hidden text-lg`}
+					key={tab.id}
 				>
-					{tab}
+					{tab.name}
 				</button>
 			))}
 			{tabsInOverflowMenu.length > 0 && (

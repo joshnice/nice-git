@@ -1,12 +1,15 @@
+import { randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
 import { type BrowserWindow, dialog } from "electron";
+import { REPO_LOCATIONS } from "../app-data/file-names";
 import { readUserFile } from "../app-data/read-file";
 import { addToUserFile } from "../app-data/write-file";
 import { RepoLocationFailure } from "../types/repo-location-types";
+import type { Repo } from "../types/repo-type";
 
-export async function chooseRepoLocation(
+export async function chooseRepoFromFileSystem(
 	mainWindow: BrowserWindow,
-): Promise<string | RepoLocationFailure> {
+): Promise<Repo | RepoLocationFailure> {
 	const result = await dialog.showOpenDialog(mainWindow, {
 		buttonLabel: "Select",
 		properties: ["openDirectory"],
@@ -26,10 +29,11 @@ export async function chooseRepoLocation(
 		return RepoLocationFailure.GitNotIntialised;
 	}
 
-	const filePathToSave = `${selectedFilePath},`;
-	await addToUserFile("user-repo-locations", filePathToSave);
-
-	return selectedFilePath;
+	return {
+		id: randomUUID(),
+		name: convertRepoLocationToRepoName(selectedFilePath),
+		location: selectedFilePath,
+	};
 }
 
 function checkDirectoryHasGit(filePath: string) {
@@ -38,9 +42,17 @@ function checkDirectoryHasGit(filePath: string) {
 }
 
 export async function getRepoLocations() {
-	const locations = await readUserFile("user-repo-locations");
+	const locations = await readUserFile(REPO_LOCATIONS);
 	if (locations == null) {
 		return [];
 	}
 	return locations.split(",").filter((loc) => loc !== "");
+}
+
+export function convertRepoLocationToRepoName(repoLocation: string): string {
+	const repoName = repoLocation.split("/").pop();
+	if (repoName == null) {
+		throw new Error();
+	}
+	return repoName;
 }

@@ -9,17 +9,23 @@ export function RepoSelectorComponent() {
 	const { repos, invalidateRepos } = useRepos();
 	const selectedRepo = useSelectedRepo();
 
-	const handleTabClicked = (tab: string) => {
-		const foundRepo = repos?.find(
-			(repo) => convertRepoLocationToRepoName(repo) === tab,
-		);
-		if (foundRepo != null) {
-			repoStore.send({ type: "setSelectedRepo", selectedRepo: foundRepo });
+	const handleRepoSelected = (selectedRepoId: string) => {
+		if (repos == null) {
+			throw new Error("No repos can be found, so can't select one");
 		}
+
+		const foundRepo = repos.find((repo) => repo.id === selectedRepoId);
+
+		if (foundRepo == null) {
+			throw new Error("Could not find the repo which was selected");
+		}
+
+		repoStore.send({ type: "setSelectedRepo", selectedRepo: foundRepo.id });
+		window.repoApi.setSelectedRepo(foundRepo.id);
 	};
 
 	const addRepo = async () => {
-		const res = await window.repoApi.selectRepoLocation();
+		const res = await window.repoApi.addRepo();
 		if (isRepoLocationFailure(res)) {
 			repoStore.send({ type: "setRepoLocationError", error: res });
 		} else {
@@ -30,24 +36,23 @@ export function RepoSelectorComponent() {
 
 	const deleteRepo = async () => {
 		if (selectedRepo == null) {
-			throw new Error();
+			throw new Error(
+				"Currently there is no repo selected so we can not delete",
+			);
 		}
 
 		repoStore.send({ type: "clearSelectedRepo" });
-		await window.repoApi.deleteRepoLocation(selectedRepo);
+		await window.repoApi.deleteRepo(selectedRepo);
 		await invalidateRepos();
 	};
-
-	const parsedRepoNames = repos?.map(convertRepoLocationToRepoName) ?? [];
-	const selectedRepoName = convertRepoLocationToRepoName(selectedRepo ?? "");
 
 	return (
 		<div className="flex">
 			{repos != null && selectedRepo != null && (
 				<TabBarComponent
-					tabs={parsedRepoNames}
-					selectedTab={selectedRepoName}
-					onTabClicked={handleTabClicked}
+					tabs={repos}
+					selectedTabId={selectedRepo}
+					onTabClicked={handleRepoSelected}
 				/>
 			)}
 			<IconButtonComponent
@@ -80,7 +85,7 @@ export function RepoSelectorComponent() {
 	);
 }
 
-function convertRepoLocationToRepoName(repoLocation: string): string {
+export function convertRepoLocationToRepoName(repoLocation: string): string {
 	const repoName = repoLocation.split("/").pop();
 	if (repoName == null) {
 		throw new Error();

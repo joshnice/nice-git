@@ -1,3 +1,5 @@
+import type { Repo } from "./repo-type";
+
 export enum RepoLocationFailure {
 	Cancel = "Cancel",
 	MulitpleFilesSelected = "MulitpleFilesSelected",
@@ -5,7 +7,7 @@ export enum RepoLocationFailure {
 }
 
 export function isRepoLocationFailure(
-	input: string,
+	input: RepoLocationFailure | Repo,
 ): input is RepoLocationFailure {
 	switch (input) {
 		case RepoLocationFailure.Cancel:

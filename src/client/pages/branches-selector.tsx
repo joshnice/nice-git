@@ -2,7 +2,6 @@ import { useBranches, useSelectedBranch } from "../state/repos/repo-branches";
 
 export function BranchesSelectorComponent() {
 	const branches = useBranches();
-
 	const { selectedBranch, setSelectedBranch } = useSelectedBranch();
 
 	return (
