@@ -1,41 +1,49 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld("repoApi", {
-	addRepo: () => {
-		return ipcRenderer.invoke("add-repo");
-	},
-	getRepos: () => {
-		return ipcRenderer.invoke("get-repos");
-	},
-	deleteRepo: (repoId: string) => {
-		return ipcRenderer.invoke("delete-repo", repoId);
-	},
-	setSelectedRepo: (repoId: string) => {
-		return ipcRenderer.invoke("set-selected-repo", repoId);
-	},
-	getSelectedRepo: () => {
-		return ipcRenderer.invoke("get-selected-repo");
+contextBridge.exposeInMainWorld("gitApi", {
+	getVersion: () => {
+		return ipcRenderer.invoke("gitApi-get-version");
 	},
 });
 
-contextBridge.exposeInMainWorld("gitApi", {
-	getVersion: () => {
-		return ipcRenderer.invoke("git-version");
+contextBridge.exposeInMainWorld("reposApi", {
+	post: () => {
+		return ipcRenderer.invoke("reposApi-post");
 	},
-	getBranches: (repoLocation: string) => {
-		return ipcRenderer.invoke("git-branches", repoLocation);
+	list: () => {
+		return ipcRenderer.invoke("reposApi-list");
 	},
-	getSelectedBranch: (repoLocation: string) => {
-		return ipcRenderer.invoke("git-selected-branch", repoLocation);
+	delete: (repoId: string) => {
+		return ipcRenderer.invoke("reposApi-delete", repoId);
 	},
-	setSelectedBranch: (repoLocation: string, branchName: string) => {
-		return ipcRenderer.invoke(
-			"git-set-selected-branch",
-			repoLocation,
-			branchName,
-		);
+});
+
+contextBridge.exposeInMainWorld("selectedReposApi", {
+	post: (repoId: string) => {
+		return ipcRenderer.invoke("selectedReposApi-post", repoId);
 	},
-	getCommits: (repoLocation: string) => {
-		return ipcRenderer.invoke("git-get-commits", repoLocation);
+	get: () => {
+		return ipcRenderer.invoke("selectedReposApi-get");
+	},
+});
+
+contextBridge.exposeInMainWorld("repoCommitsApi", {
+	list: (repoId: string) => {
+		return ipcRenderer.invoke("repoCommitsApi-list", repoId);
+	},
+});
+
+contextBridge.exposeInMainWorld("repoBranchesApi", {
+	list: (repoId: string) => {
+		return ipcRenderer.invoke("repoBranchesApi-list", repoId);
+	},
+});
+
+contextBridge.exposeInMainWorld("selectedRepoBranchApi", {
+	get: (repoId: string) => {
+		return ipcRenderer.invoke("selectedRepoBranchApi-get", repoId);
+	},
+	post: (repoId: string, branchName: string) => {
+		return ipcRenderer.invoke("selectedRepoBranchApi-post", repoId, branchName);
 	},
 });

@@ -2,11 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { isRepoLocationFailure } from "../../types/repo-location-types";
 import { TabBarComponent } from "../components/tab-bar";
-import {
-	repoStore,
-	useRepoLocationError,
-	useSelectedRepo,
-} from "../state/repos/repo-store";
+import { repoStore, useRepoLocationError } from "../state/repos/repo-store";
 import { useRepos } from "../state/repos/repos";
 import { BranchCommitsComponent } from "./branch-commits";
 import { BranchesSelectorComponent } from "./branches-selector";

@@ -6,7 +6,7 @@ import type { IDataStore } from "../data-store";
 import { SELECTED_REPO_FILE_NAME } from "./repos-file-names";
 
 class _SelectedRepoStore implements IDataStore<string> {
-	public async get() {
+	public async list() {
 		const fileAsString = await readUserFile(SELECTED_REPO_FILE_NAME);
 		return fileAsString;
 	}

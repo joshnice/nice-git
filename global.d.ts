@@ -6,20 +6,33 @@ declare global {
 	interface Window {
 		gitApi: {
 			getVersion: () => Promise<string>;
-			getBranches: (location: string) => Promise<string[]>;
-			getSelectedBranch: (location: string) => Promise<string>;
-			setSelectedBranch: (
-				location: string,
-				branchName: string,
-			) => Promise<void>;
-			getCommits: (location: string) => Promise<GitCommit[]>;
 		};
-		repoApi: {
-			addRepo: () => Promise<Repo | RepoLocationFailure>;
-			deleteRepo: (repoId: string) => Promise<void>;
-			getRepos: () => Promise<Repo[]>;
-			getSelectedRepo: () => Promise<string | null>;
-			setSelectedRepo: (repoName: string) => Promise<string>;
+
+		reposApi: {
+			post: () => Promise<Repo | RepoLocationFailure>;
+			delete: (repoId: string) => Promise<void>;
+			list: () => Promise<Repo[]>;
+		};
+
+		selectedReposApi: {
+			get: () => Promise<string | null>;
+			post: (repoName: string) => Promise<string>;
+		};
+
+		repoCommitsApi: {
+			list: (
+				selectedRepoId: string,
+				selectedBranch: string,
+			) => Promise<GitCommit[]>;
+		};
+
+		repoBranchesApi: {
+			list: (selectedRepoId: string) => Promise<string[]>;
+		};
+
+		selectedRepoBranchApi: {
+			get: (selectedRepoId: string) => Promise<string>;
+			post: (selectedRepoId: string, branchName: string) => Promise<void>;
 		};
 	}
 }

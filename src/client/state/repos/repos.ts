@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { repoStore, useSelectedRepo } from "./repo-store";
+import { repoStore } from "./repo-store";
+import { useSelectedRepo } from "./selected-repo";
 
 export function useRepos() {
 	const queryClient = useQueryClient();
@@ -7,17 +8,7 @@ export function useRepos() {
 
 	const { data: repos } = useQuery({
 		queryKey: ["repos"],
-		queryFn: async () => {
-			const repos = await window.repoApi.getRepos();
-			const previouslySelectedRepo = await window.repoApi.getSelectedRepo();
-			if (selectedRepo == null) {
-				repoStore.send({
-					type: "setSelectedRepo",
-					selectedRepo: previouslySelectedRepo ?? repos[0].id,
-				});
-			}
-			return repos;
-		},
+		queryFn: window.reposApi.list,
 	});
 
 	const invalidateRepos = async () => {

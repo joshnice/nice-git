@@ -6,7 +6,13 @@ import type { IDataStore } from "../data-store";
 import { REPOS_FILE_NAME } from "./repos-file-names";
 
 class _RepoDataStore implements IDataStore<Repo[]> {
-	public async get() {
+	public async get(repoId: string) {
+		const repos = await this.list();
+		const foundRepo = repos.find((repo) => repo.id === repoId);
+		return foundRepo;
+	}
+
+	public async list() {
 		const fileAsString = await readUserFile(REPOS_FILE_NAME);
 		const fileAsJSON = parseStringToJson(fileAsString);
 		if (Array.isArray(fileAsJSON) && fileAsJSON.every(isRepo)) {
@@ -21,7 +27,7 @@ class _RepoDataStore implements IDataStore<Repo[]> {
 	}
 
 	public async append(repo: Repo) {
-		const repos = await this.get();
+		const repos = await this.list();
 
 		if (repos != null) {
 			repos.push(repo);
@@ -30,7 +36,7 @@ class _RepoDataStore implements IDataStore<Repo[]> {
 	}
 
 	public async remove(repoId: string) {
-		const repos = await this.get();
+		const repos = await this.list();
 		if (repos != null) {
 			const updatedRepos = repos.filter(({ id }) => id !== repoId);
 			await this.write(updatedRepos);

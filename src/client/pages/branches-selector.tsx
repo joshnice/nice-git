@@ -1,8 +1,12 @@
-import { useBranches, useSelectedBranch } from "../state/repos/repo-branches";
+import { useBranches } from "../state/repos/repo-branches";
+import { useSelectedBranch } from "../state/repos/selected-branch";
 
 export function BranchesSelectorComponent() {
 	const branches = useBranches();
+
 	const { selectedBranch, setSelectedBranch } = useSelectedBranch();
+
+	console.log("selectedBranch", selectedBranch);
 
 	return (
 		<div className="flex flex-col gap-2">

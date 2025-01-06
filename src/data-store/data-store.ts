@@ -1,4 +1,4 @@
 export interface IDataStore<T> {
-	get: () => Promise<T | null>;
+	list: () => Promise<T | null>;
 	write: (content: T) => Promise<void>;
 }

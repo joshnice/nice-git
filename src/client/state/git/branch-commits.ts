@@ -1,18 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSelectedBranch } from "../repos/repo-branches";
-import { useSelectedRepo } from "../repos/repo-store";
+import { useSelectedBranch } from "../repos/selected-branch";
+import { useSelectedRepo } from "../repos/selected-repo";
 
 export function useBranchCommits() {
-	const repoLocation = useSelectedRepo();
-	const branchName = useSelectedBranch();
+	const { selectedRepoId } = useSelectedRepo();
+	const { selectedBranch } = useSelectedBranch();
 
 	const { data: commits } = useQuery({
-		queryKey: ["branch", repoLocation, branchName],
+		queryKey: ["branch", selectedRepoId, selectedBranch],
 		queryFn: async () => {
-			if (repoLocation == null) {
+			if (selectedRepoId == null || selectedBranch == null) {
 				throw new Error();
 			}
-			const commits = await window.gitApi.getCommits(repoLocation);
+			const commits = await window.repoCommitsApi.list(
+				selectedRepoId,
+				selectedBranch,
+			);
 			return commits;
 		},
 	});

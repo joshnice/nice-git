@@ -16,7 +16,6 @@ import {
 	chooseRepoFromFileSystem,
 	getRepoLocations,
 } from "./repo/repo-location";
-import { getLastSelectedRepo, setLastSelectedRepo } from "./repo/repo-selected";
 import { isRepoLocationFailure } from "./types/repo-location-types";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -58,7 +57,7 @@ app.on("ready", createWindow);
 
 /** IPC - Repos */
 
-ipcMain.handle("add-repo", async () => {
+ipcMain.handle("reposApi-post", async () => {
 	const repo = await chooseRepoFromFileSystem(mainWindow);
 	if (isRepoLocationFailure(repo)) {
 		return repo;
@@ -66,52 +65,74 @@ ipcMain.handle("add-repo", async () => {
 	await RepoDataStore.append(repo);
 });
 
-ipcMain.handle("delete-repo", async (event, repoId: string) => {
+ipcMain.handle("reposApi-delete", async (event, repoId: string) => {
 	await RepoDataStore.remove(repoId);
 });
 
-ipcMain.handle("get-repos", async () => {
-	const locations = await RepoDataStore.get();
+ipcMain.handle("reposApi-list", async () => {
+	const locations = await RepoDataStore.list();
 	return locations;
 });
 
 /** IPC - Selected repos */
 
-ipcMain.handle("get-selected-repo", async () => {
-	const lastSelectedRepo = await SelectedRepoStore.get();
+ipcMain.handle("selectedReposApi-get", async () => {
+	const lastSelectedRepo = await SelectedRepoStore.list();
 	return lastSelectedRepo;
 });
 
-ipcMain.handle("set-selected-repo", async (event, repoId: string) => {
+ipcMain.handle("selectedReposApi-post", async (event, repoId: string) => {
 	const lastSelectedRepo = await SelectedRepoStore.write(repoId);
 	return lastSelectedRepo;
 });
 
 /** IPC - Git */
 
-ipcMain.handle("git-version", async () => {
+ipcMain.handle("gitApi-get-version", async () => {
 	const version = await getGitVersion();
 	return version;
 });
 
-ipcMain.handle("git-branches", async (event, repoLocation: string) => {
-	const branches = await getGitBranches(repoLocation);
+/** IPC - Branches */
+
+ipcMain.handle("repoBranchesApi-list", async (event, repoId: string) => {
+	const repo = await RepoDataStore.get(repoId);
+
+	if (repo == null) {
+		return [];
+	}
+
+	const branches = await getGitBranches(repo?.location);
 	return branches;
 });
 
-ipcMain.handle("git-selected-branch", async (event, repoLocation: string) => {
-	const branches = await getSelectedBranch(repoLocation);
-	return branches;
+ipcMain.handle("selectedRepoBranchApi-get", async (event, repoId: string) => {
+	const repo = await RepoDataStore.get(repoId);
+
+	if (repo == null) {
+		return [];
+	}
+
+	const selectedBranch = await getSelectedBranch(repo.location);
+	return selectedBranch;
 });
 
 ipcMain.handle(
-	"git-set-selected-branch",
-	async (event, repoLocation: string, branchName: string) => {
-		await setSelectedBranch(repoLocation, branchName);
+	"selectedRepoBranchApi-post",
+	async (event, repoId: string, branchName: string) => {
+		const repo = await RepoDataStore.get(repoId);
+
+		if (repo == null) {
+			throw new Error(`Repo with id of ${repoId} can't be found`);
+		}
+
+		await setSelectedBranch(repo.location, branchName);
 	},
 );
 
-ipcMain.handle("git-get-commits", async (event, repoLocation) => {
+/** IPC - Commits */
+
+ipcMain.handle("repoCommitsApi-list", async (event, repoLocation) => {
 	const commits = await gitGetPreviousCommits(repoLocation);
 	return commits;
 });

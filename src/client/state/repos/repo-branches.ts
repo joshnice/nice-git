@@ -1,49 +1,25 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSelectedRepo } from "./repo-store";
+import { useQuery } from "@tanstack/react-query";
+import { useSelectedRepo } from "./selected-repo";
+
+const getQueryKey = (selectedRepoId: string | null | undefined) => [
+	"branches",
+	selectedRepoId,
+];
 
 export function useBranches() {
-	const selectedRepo = useSelectedRepo();
+	const { selectedRepoId } = useSelectedRepo();
 
 	const { data: branches } = useQuery({
-		queryKey: ["branches", selectedRepo],
-		enabled: selectedRepo != null,
+		queryKey: getQueryKey(selectedRepoId),
+		enabled: selectedRepoId != null,
 		queryFn: async () => {
-			if (selectedRepo == null) {
+			if (selectedRepoId == null) {
 				throw new Error();
 			}
-			const res = window.gitApi.getBranches(selectedRepo);
+			const res = await window.repoBranchesApi.list(selectedRepoId);
 			return res;
 		},
 	});
 
 	return branches;
-}
-
-export function useSelectedBranch() {
-	const queryClient = useQueryClient();
-	const selectedRepo = useSelectedRepo();
-
-	const { data: selectedBranch } = useQuery({
-		queryKey: ["selected-branch", selectedRepo],
-		enabled: selectedRepo != null,
-		queryFn: async () => {
-			if (selectedRepo == null) {
-				throw new Error();
-			}
-			const res = window.gitApi.getSelectedBranch(selectedRepo);
-			return res;
-		},
-	});
-
-	const setSelectedBranch = async (branchName: string) => {
-		if (selectedRepo == null) {
-			throw new Error();
-		}
-		await window.gitApi.setSelectedBranch(selectedRepo, branchName);
-		queryClient.invalidateQueries({
-			queryKey: ["selected-branch", selectedRepo],
-		});
-	};
-
-	return { selectedBranch, setSelectedBranch };
 }

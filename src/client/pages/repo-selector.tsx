@@ -1,57 +1,59 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isRepoLocationFailure } from "../../types/repo-location-types";
+import {
+	type RepoLocationFailure,
+	isRepoLocationFailure,
+} from "../../types/repo-location-types";
+import type { Repo } from "../../types/repo-type";
 import { IconButtonComponent } from "../components/icon-button";
 import { TabBarComponent } from "../components/tab-bar";
-import { repoStore, useSelectedRepo } from "../state/repos/repo-store";
+import { repoStore } from "../state/repos/repo-store";
 import { useRepos } from "../state/repos/repos";
+import { useSelectedRepo } from "../state/repos/selected-repo";
 
 export function RepoSelectorComponent() {
 	const { repos, invalidateRepos } = useRepos();
-	const selectedRepo = useSelectedRepo();
+
+	console.log("repos", repos);
+
+	const { selectedRepoId, setSelectedRepoId } = useSelectedRepo();
+
+	console.log("selectedRepoId", selectedRepoId);
 
 	const handleRepoSelected = (selectedRepoId: string) => {
-		if (repos == null) {
-			throw new Error("No repos can be found, so can't select one");
-		}
-
-		const foundRepo = repos.find((repo) => repo.id === selectedRepoId);
-
+		const foundRepo: Repo = repos?.find((repo) => repo.id === selectedRepoId);
 		if (foundRepo == null) {
 			throw new Error("Could not find the repo which was selected");
 		}
 
-		repoStore.send({ type: "setSelectedRepo", selectedRepo: foundRepo.id });
-		window.repoApi.setSelectedRepo(foundRepo.id);
+		setSelectedRepoId(foundRepo.id);
 	};
 
 	const addRepo = async () => {
-		const res = await window.repoApi.addRepo();
+		const res: Repo | RepoLocationFailure = await window.reposApi.post();
 		if (isRepoLocationFailure(res)) {
 			repoStore.send({ type: "setRepoLocationError", error: res });
 		} else {
 			invalidateRepos();
-			repoStore.send({ type: "setSelectedRepo", selectedRepo: res });
+			setSelectedRepoId(res.id);
 		}
 	};
 
 	const deleteRepo = async () => {
-		if (selectedRepo == null) {
+		if (selectedRepoId == null) {
 			throw new Error(
 				"Currently there is no repo selected so we can not delete",
 			);
 		}
-
-		repoStore.send({ type: "clearSelectedRepo" });
-		await window.repoApi.deleteRepo(selectedRepo);
+		await window.reposApi.delete(selectedRepoId);
 		await invalidateRepos();
 	};
 
 	return (
 		<div className="flex">
-			{repos != null && selectedRepo != null && (
+			{repos != null && selectedRepoId != null && (
 				<TabBarComponent
 					tabs={repos}
-					selectedTabId={selectedRepo}
+					selectedTabId={selectedRepoId}
 					onTabClicked={handleRepoSelected}
 				/>
 			)}
