@@ -6,7 +6,7 @@ export function BranchesSelectorComponent() {
 	const { selectedBranch, setSelectedBranch } = useSelectedBranch();
 
 	return (
-		<div className="flex flex-col gap-2">
+		<div className="w-1/4 flex flex-col gap-2">
 			{branches?.map((branch) => (
 				<button
 					key={branch}

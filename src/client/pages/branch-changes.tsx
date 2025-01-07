@@ -1,5 +1,5 @@
 import type { FileChange } from "src/types/branch-changes";
-import { SubTitleComponent } from "../components/header";
+import { TitleComponent } from "../components/header";
 import { useBranchChanges } from "../state/commits/branch-changes";
 
 export function BranchChangesComponent() {
@@ -12,16 +12,22 @@ export function BranchChangesComponent() {
 	return (
 		<div className="flex">
 			<div className="w-1/2">
-				<SubTitleComponent content="Unstaged" />
+				<TitleComponent content="Unstaged" />
 				{branchChanges.unstagedChanges.map((change) => (
 					<ChangeComponent key={change.id} change={change} />
 				))}
+				{branchChanges.unstagedChanges.length === 0 && (
+					<span className="italic">There are no unstaged changes</span>
+				)}
 			</div>
 			<div className="w-1/2">
-				<SubTitleComponent content="Staged" />
+				<TitleComponent content="Staged" />
 				{branchChanges.stagedChanges.map((change) => (
 					<ChangeComponent key={change.id} change={change} />
 				))}
+				{branchChanges.stagedChanges.length === 0 && (
+					<span className="italic">There are no staged changes</span>
+				)}
 			</div>
 		</div>
 	);

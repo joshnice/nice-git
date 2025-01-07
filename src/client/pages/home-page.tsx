@@ -11,16 +11,18 @@ import { RepoSelectorComponent } from "./repo-selector";
 
 export function HomePage() {
 	return (
-		<div className="p-5 flex flex-col gap-2 overflow-hidden">
+		<div className="h-full w-full p-5 flex flex-col gap-2 overflow-hidden">
 			<h1 className="text-3xl font-bold underline">Nice git</h1>
 			<RepoSelectorComponent />
-			<div className="flex gap-4   ">
-				<div className="w-1/4 flex flex-col">
-					<BranchesSelectorComponent />
-				</div>
-				<div className="flex flex-col w-3/4">
-					<BranchCommitsComponent />
-					<BranchChangesComponent />
+			<div className="flex gap-4 flex-grow">
+				<BranchesSelectorComponent />
+				<div className="flex flex-col gap-3 w-3/4">
+					<div className="h-1/2 overflow-hidden">
+						<BranchCommitsComponent />
+					</div>
+					<div className="h-1/2 overflow-hidden">
+						<BranchChangesComponent />
+					</div>
 				</div>
 			</div>
 		</div>
