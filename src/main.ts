@@ -132,8 +132,13 @@ ipcMain.handle(
 
 /** IPC - Commits */
 
-ipcMain.handle("repoCommitsApi-list", async (event, repoLocation) => {
-	const commits = await gitGetPreviousCommits(repoLocation);
+ipcMain.handle("repoCommitsApi-list", async (event, repoId: string) => {
+	const repo = await RepoDataStore.get(repoId);
+	if (repo == null) {
+		throw new Error(`Repo with id of ${repoId} can't be found`);
+	}
+
+	const commits = await gitGetPreviousCommits(repo.location);
 	return commits;
 });
 

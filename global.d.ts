@@ -20,10 +20,7 @@ declare global {
 		};
 
 		repoCommitsApi: {
-			list: (
-				selectedRepoId: string,
-				selectedBranch: string,
-			) => Promise<GitCommit[]>;
+			list: (selectedRepoId: string) => Promise<GitCommit[]>;
 		};
 
 		repoBranchesApi: {

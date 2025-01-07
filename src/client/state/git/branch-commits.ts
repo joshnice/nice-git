@@ -4,18 +4,14 @@ import { useSelectedRepo } from "../repos/selected-repo";
 
 export function useBranchCommits() {
 	const { selectedRepoId } = useSelectedRepo();
-	const { selectedBranch } = useSelectedBranch();
 
 	const { data: commits } = useQuery({
-		queryKey: ["branch", selectedRepoId, selectedBranch],
+		queryKey: ["branch", selectedRepoId],
 		queryFn: async () => {
-			if (selectedRepoId == null || selectedBranch == null) {
-				throw new Error();
+			if (selectedRepoId == null) {
+				throw new Error("There is no current selected repo");
 			}
-			const commits = await window.repoCommitsApi.list(
-				selectedRepoId,
-				selectedBranch,
-			);
+			const commits = await window.repoCommitsApi.list(selectedRepoId);
 			return commits;
 		},
 	});
