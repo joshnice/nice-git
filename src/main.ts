@@ -11,6 +11,7 @@ import {
 	getSelectedBranch,
 	setSelectedBranch,
 } from "./git/git-selected-branch";
+import { getGitStatus } from "./git/git-status";
 import { getGitVersion } from "./git/git-version";
 import {
 	chooseRepoFromFileSystem,
@@ -140,6 +141,17 @@ ipcMain.handle("repoCommitsApi-list", async (event, repoId: string) => {
 
 	const commits = await gitGetPreviousCommits(repo.location);
 	return commits;
+});
+
+/** IPC - Branch changes */
+ipcMain.handle("branchChangesApi-get", async (event, repoId: string) => {
+	const repo = await RepoDataStore.get(repoId);
+	if (repo == null) {
+		throw new Error(`Repo with id of ${repoId} can't be found`);
+	}
+
+	const changes = await getGitStatus(repo.location);
+	return changes;
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

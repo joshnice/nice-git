@@ -12,12 +12,7 @@ import { useSelectedRepo } from "../state/repos/selected-repo";
 
 export function RepoSelectorComponent() {
 	const { repos, invalidateRepos } = useRepos();
-
-	console.log("repos", repos);
-
 	const { selectedRepoId, setSelectedRepoId } = useSelectedRepo();
-
-	console.log("selectedRepoId", selectedRepoId);
 
 	const handleRepoSelected = (selectedRepoId: string) => {
 		const foundRepo: Repo = repos?.find((repo) => repo.id === selectedRepoId);

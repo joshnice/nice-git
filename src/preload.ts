@@ -47,3 +47,9 @@ contextBridge.exposeInMainWorld("selectedRepoBranchApi", {
 		return ipcRenderer.invoke("selectedRepoBranchApi-post", repoId, branchName);
 	},
 });
+
+contextBridge.exposeInMainWorld("branchChangesApi", {
+	get: (repoId: string) => {
+		return ipcRenderer.invoke("branchChangesApi-get", repoId);
+	},
+});

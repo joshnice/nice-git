@@ -1,3 +1,5 @@
+import type { GitStatus } from "src/types/git-status";
+import type { BranchChanges } from "../types/branch-changes";
 import type { Repo } from "../types/repo-type";
 import type { GitCommit } from "./src/git/git-types";
 import type { RepoLocationFailure } from "./src/types/repo-location-types";
@@ -21,6 +23,10 @@ declare global {
 
 		repoCommitsApi: {
 			list: (selectedRepoId: string) => Promise<GitCommit[]>;
+		};
+
+		branchChangesApi: {
+			get: (repoId: string) => Promise<BranchChanges>;
 		};
 
 		repoBranchesApi: {

@@ -4,6 +4,7 @@ import { isRepoLocationFailure } from "../../types/repo-location-types";
 import { TabBarComponent } from "../components/tab-bar";
 import { repoStore, useRepoLocationError } from "../state/repos/repo-store";
 import { useRepos } from "../state/repos/repos";
+import { BranchChangesComponent } from "./branch-changes";
 import { BranchCommitsComponent } from "./branch-commits";
 import { BranchesSelectorComponent } from "./branches-selector";
 import { RepoSelectorComponent } from "./repo-selector";
@@ -17,8 +18,9 @@ export function HomePage() {
 				<div className="w-1/4 flex flex-col">
 					<BranchesSelectorComponent />
 				</div>
-				<div className="w-3/4">
+				<div className="flex flex-col w-3/4">
 					<BranchCommitsComponent />
+					<BranchChangesComponent />
 				</div>
 			</div>
 		</div>

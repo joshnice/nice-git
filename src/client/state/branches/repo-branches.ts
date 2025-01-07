@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSelectedRepo } from "./selected-repo";
+import { useSelectedRepo } from "../repos/selected-repo";
 
 const getQueryKey = (selectedRepoId: string | null | undefined) => [
 	"branches",

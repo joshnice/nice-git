@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSelectedBranch } from "../repos/selected-branch";
 import { useSelectedRepo } from "../repos/selected-repo";
 
 export function useBranchCommits() {

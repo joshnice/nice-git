@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSelectedRepo } from "./selected-repo";
+import { useSelectedRepo } from "../repos/selected-repo";
 
 const getQueryKey = (selectedRepoId: string | null | undefined) => [
 	"selected-branch",
@@ -9,8 +9,6 @@ const getQueryKey = (selectedRepoId: string | null | undefined) => [
 export function useSelectedBranch() {
 	const queryClient = useQueryClient();
 	const { selectedRepoId } = useSelectedRepo();
-
-	console.log("selectedRepoId", selectedRepoId);
 
 	const { data: selectedBranch } = useQuery({
 		queryKey: getQueryKey(selectedRepoId),
