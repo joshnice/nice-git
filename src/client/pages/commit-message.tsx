@@ -1,6 +1,8 @@
 import { type ChangeEvent, useState } from "react";
+import { useCreateCommit } from "../state/commits/branch-commits";
 
 export function CommitMessageComponent() {
+	const createCommit = useCreateCommit();
 	const [commitMessage, setCommitMessage] = useState("");
 
 	const handleCommitMessageChange = (
@@ -11,6 +13,11 @@ export function CommitMessageComponent() {
 		}
 	};
 
+	const handleCreateCommit = async () => {
+		await createCommit(commitMessage);
+		setCommitMessage("");
+	};
+
 	return (
 		<div className="flex gap-3">
 			<textarea
@@ -19,7 +26,9 @@ export function CommitMessageComponent() {
 				className="border-solid border-black border w-2/3 resize-none"
 				rows={2}
 			/>
-			<button type="button">Commit & Push</button>
+			<button type="button" onClick={handleCreateCommit}>
+				Commit & Push
+			</button>
 		</div>
 	);
 }

@@ -1,4 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getSelectedBranch } from "src/git/git-selected-branch";
 import type { BranchChanges } from "src/types/branch-changes";
 import { useSelectedRepo } from "../repos/selected-repo";
 
@@ -8,6 +9,8 @@ const getQueryKey = (selectedRepoId: string | null | undefined) => [
 
 export function useBranchChanges() {
 	const { selectedRepoId } = useSelectedRepo();
+
+	const queryClient = useQueryClient();
 
 	const { data: branchChanges } = useQuery({
 		queryKey: getQueryKey(selectedRepoId),
@@ -22,5 +25,18 @@ export function useBranchChanges() {
 		},
 	});
 
-	return branchChanges;
+	const addFileToChanges = async (fileName: string) => {
+		if (selectedRepoId == null) {
+			throw new Error("There is no selected repo");
+		}
+
+		await window.branchChangesApi.post(selectedRepoId, [fileName]);
+		await queryClient.invalidateQueries({
+			queryKey: getQueryKey(selectedRepoId),
+		});
+	};
+
+	return { branchChanges, addFileToChanges };
 }
+
+export function useAddFileToChanges() {}

@@ -1,11 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelectedRepo } from "../repos/selected-repo";
+
+const getQueryKey = (selectedRepoId: string | null | undefined) => [
+	"branch",
+	selectedRepoId,
+];
 
 export function useBranchCommits() {
 	const { selectedRepoId } = useSelectedRepo();
 
 	const { data: commits } = useQuery({
-		queryKey: ["branch", selectedRepoId],
+		queryKey: getQueryKey(selectedRepoId),
 		queryFn: async () => {
 			if (selectedRepoId == null) {
 				throw new Error("There is no current selected repo");
@@ -16,4 +21,21 @@ export function useBranchCommits() {
 	});
 
 	return commits;
+}
+
+export function useCreateCommit() {
+	const { selectedRepoId } = useSelectedRepo();
+	const queryClient = useQueryClient();
+
+	const createCommit = async (commitMessage: string) => {
+		if (selectedRepoId == null) {
+			throw new Error("There is no current selected repo");
+		}
+		await window.repoCommitsApi.post(selectedRepoId, commitMessage);
+		await queryClient.invalidateQueries({
+			queryKey: getQueryKey(selectedRepoId),
+		});
+	};
+
+	return createCommit;
 }
