@@ -8,6 +8,7 @@ import { useRepos } from "../state/repos/repos";
 import { BranchChangesComponent } from "./branch-changes";
 import { BranchCommitsComponent } from "./branch-commits";
 import { BranchesSelectorComponent } from "./branches-selector";
+import { CommitMessageComponent } from "./commit-message";
 import { RepoSelectorComponent } from "./repo-selector";
 import { RepoTitleComponent } from "./repo-title-component";
 
@@ -27,6 +28,9 @@ export function HomePage() {
 					</div>
 					<div className="h-1/2 overflow-hidden">
 						<BranchChangesComponent />
+					</div>
+					<div>
+						<CommitMessageComponent />
 					</div>
 				</div>
 			</div>

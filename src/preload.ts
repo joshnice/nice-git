@@ -31,6 +31,9 @@ contextBridge.exposeInMainWorld("repoCommitsApi", {
 	list: (repoId: string) => {
 		return ipcRenderer.invoke("repoCommitsApi-list", repoId);
 	},
+	post: (repoId: string, commitMessage: string) => {
+		return ipcRenderer.invoke("repoCommitsApi-post", repoId, commitMessage);
+	},
 });
 
 contextBridge.exposeInMainWorld("repoBranchesApi", {
@@ -51,5 +54,8 @@ contextBridge.exposeInMainWorld("selectedRepoBranchApi", {
 contextBridge.exposeInMainWorld("branchChangesApi", {
 	get: (repoId: string) => {
 		return ipcRenderer.invoke("branchChangesApi-get", repoId);
+	},
+	post: (repoId: string, fileNames: string[]) => {
+		return ipcRenderer.invoke("branchChangesApi-post", repoId, fileNames);
 	},
 });

@@ -26,3 +26,11 @@ export async function gitGetPreviousCommits(
 	}
 	return commits;
 }
+
+export async function gitCommitAndPush(
+	repoLocation: string,
+	commitMessage: string,
+) {
+	const command = `cd ${repoLocation} && git commit -m "${commitMessage} && git push"`;
+	await executeCommand<string>(command);
+}

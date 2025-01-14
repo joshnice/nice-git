@@ -23,6 +23,7 @@ declare global {
 
 		repoCommitsApi: {
 			list: (selectedRepoId: string) => Promise<GitCommit[]>;
+			post: (selectedRepoId: string, commitMessage: string) => Promise<void>;
 		};
 
 		branchChangesApi: {

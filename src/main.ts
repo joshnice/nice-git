@@ -5,8 +5,9 @@ import { deleteUserFile } from "./app-data/delete-file";
 import { readUserFile } from "./app-data/read-file";
 import { RepoDataStore } from "./data-store/repos/repo-data-store";
 import { SelectedRepoStore } from "./data-store/repos/selected-repo-store";
+import { gitAddFiles } from "./git/git-add";
 import { getGitBranches } from "./git/git-branches";
-import { gitGetPreviousCommits } from "./git/git-commits";
+import { gitCommitAndPush, gitGetPreviousCommits } from "./git/git-commits";
 import {
 	getSelectedBranch,
 	setSelectedBranch,
@@ -143,6 +144,17 @@ ipcMain.handle("repoCommitsApi-list", async (event, repoId: string) => {
 	return commits;
 });
 
+ipcMain.handle(
+	"repoCommitsApi-post",
+	async (event, repoId: string, commitMessage: string) => {
+		const repo = await RepoDataStore.get(repoId);
+		if (repo == null) {
+			throw new Error(`Repo with id of ${repoId} can't be found`);
+		}
+		await gitCommitAndPush(repo.location, commitMessage);
+	},
+);
+
 /** IPC - Branch changes */
 ipcMain.handle("branchChangesApi-get", async (event, repoId: string) => {
 	const repo = await RepoDataStore.get(repoId);
@@ -153,6 +165,17 @@ ipcMain.handle("branchChangesApi-get", async (event, repoId: string) => {
 	const changes = await getGitStatus(repo.location);
 	return changes;
 });
+
+ipcMain.handle(
+	"branchChangesApi-post",
+	async (event, repoId: string, fileNames: string[]) => {
+		const repo = await RepoDataStore.get(repoId);
+		if (repo == null) {
+			throw new Error(`Repo with id of ${repoId} can't be found`);
+		}
+		await gitAddFiles(repo.location, fileNames);
+	},
+);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
