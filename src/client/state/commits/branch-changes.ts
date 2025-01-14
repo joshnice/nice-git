@@ -3,7 +3,7 @@ import { getSelectedBranch } from "src/git/git-selected-branch";
 import type { BranchChanges } from "src/types/branch-changes";
 import { useSelectedRepo } from "../repos/selected-repo";
 
-const getQueryKey = (selectedRepoId: string | null | undefined) => [
+export const getQueryKey = (selectedRepoId: string | null | undefined) => [
 	`branch-changes-${selectedRepoId}`,
 ];
 

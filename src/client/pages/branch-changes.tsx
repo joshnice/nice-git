@@ -9,8 +9,6 @@ export function BranchChangesComponent() {
 		return <></>;
 	}
 
-	console.log("branchChanges", branchChanges);
-
 	return (
 		<div className="flex">
 			<div className="w-1/2">

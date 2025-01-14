@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelectedRepo } from "../repos/selected-repo";
+import { getQueryKey as getQueryKeyForStagedFiles } from "./branch-changes";
 
 const getQueryKey = (selectedRepoId: string | null | undefined) => [
 	"branch",
@@ -34,6 +35,9 @@ export function useCreateCommit() {
 		await window.repoCommitsApi.post(selectedRepoId, commitMessage);
 		await queryClient.invalidateQueries({
 			queryKey: getQueryKey(selectedRepoId),
+		});
+		await queryClient.invalidateQueries({
+			queryKey: getQueryKeyForStagedFiles(selectedRepoId),
 		});
 	};
 
