@@ -28,6 +28,7 @@ declare global {
 
 		branchChangesApi: {
 			get: (repoId: string) => Promise<BranchChanges>;
+			post: (repoId: string, fileNames: string[]) => Promise<void>;
 		};
 
 		repoBranchesApi: {
