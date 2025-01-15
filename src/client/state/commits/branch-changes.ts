@@ -1,3 +1,4 @@
+import { removeAllListeners } from "node:process";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSelectedBranch } from "src/git/git-selected-branch";
 import type { BranchChanges } from "src/types/branch-changes";
@@ -25,18 +26,67 @@ export function useBranchChanges() {
 		},
 	});
 
+	const invalidateBranchChanges = async () => {
+		await queryClient.invalidateQueries({
+			queryKey: getQueryKey(selectedRepoId),
+		});
+	};
+
 	const addFileToChanges = async (fileName: string) => {
 		if (selectedRepoId == null) {
 			throw new Error("There is no selected repo");
 		}
 
 		await window.branchChangesApi.post(selectedRepoId, [fileName]);
-		await queryClient.invalidateQueries({
-			queryKey: getQueryKey(selectedRepoId),
-		});
+		await invalidateBranchChanges();
 	};
 
-	return { branchChanges, addFileToChanges };
-}
+	const addAllFileToChanges = async () => {
+		if (selectedRepoId == null) {
+			throw new Error("There is no selected repo");
+		}
 
-export function useAddFileToChanges() {}
+		if (branchChanges?.stagedChanges == null) {
+			throw new Error("Staged change is not defined");
+		}
+
+		const fileNameChanges = branchChanges?.unstagedChanges.map(
+			(change) => change.fileName,
+		);
+		await window.branchChangesApi.post(selectedRepoId, fileNameChanges);
+		await invalidateBranchChanges();
+	};
+
+	const removeFileFromChanges = async (fileName: string) => {
+		if (selectedRepoId == null) {
+			throw new Error("There is no selected repo");
+		}
+
+		await window.branchChangesApi.delete(selectedRepoId, [fileName]);
+		await invalidateBranchChanges();
+	};
+
+	const removeAllFilesFromChanges = async () => {
+		if (selectedRepoId == null) {
+			throw new Error("There is no selected repo");
+		}
+
+		if (branchChanges?.stagedChanges == null) {
+			throw new Error("Staged change is not defined");
+		}
+
+		const fileNameChanges = branchChanges?.stagedChanges.map(
+			(change) => change.fileName,
+		);
+		await window.branchChangesApi.delete(selectedRepoId, fileNameChanges);
+		await invalidateBranchChanges();
+	};
+
+	return {
+		branchChanges,
+		addFileToChanges,
+		addAllFileToChanges,
+		removeFileFromChanges,
+		removeAllFilesFromChanges,
+	};
+}

@@ -58,4 +58,7 @@ contextBridge.exposeInMainWorld("branchChangesApi", {
 	post: (repoId: string, fileNames: string[]) => {
 		return ipcRenderer.invoke("branchChangesApi-post", repoId, fileNames);
 	},
+	delete: (repoId: string, fileNames: string[]) => {
+		return ipcRenderer.invoke("branchChangesApi-delete", repoId, fileNames);
+	},
 });

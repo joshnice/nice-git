@@ -8,6 +8,7 @@ import { SelectedRepoStore } from "./data-store/repos/selected-repo-store";
 import { gitAddFiles } from "./git/git-add";
 import { getGitBranches } from "./git/git-branches";
 import { gitCommitAndPush, gitGetPreviousCommits } from "./git/git-commits";
+import { gitRemoveFileFromStaged } from "./git/git-restore";
 import {
 	getSelectedBranch,
 	setSelectedBranch,
@@ -174,6 +175,17 @@ ipcMain.handle(
 			throw new Error(`Repo with id of ${repoId} can't be found`);
 		}
 		await gitAddFiles(repo.location, fileNames);
+	},
+);
+
+ipcMain.handle(
+	"branchChangesApi-delete",
+	async (event, repoId: string, fileNames: string[]) => {
+		const repo = await RepoDataStore.get(repoId);
+		if (repo == null) {
+			throw new Error(`Repo with id of ${repoId} can't be found`);
+		}
+		await gitRemoveFileFromStaged(repo.location, fileNames);
 	},
 );
 
