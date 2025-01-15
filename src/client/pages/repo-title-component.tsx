@@ -16,6 +16,11 @@ export function RepoTitleComponent() {
 		}
 
 		const selectedRepo = repos.find((repo) => repo.id === selectedRepoId);
+
+		if (selectedRepo == null) {
+			return null;
+		}
+
 		return `${selectedRepo.name} - ${selectedBranch}`;
 	}, [selectedRepoId, selectedBranch, repos]);
 

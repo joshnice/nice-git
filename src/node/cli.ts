@@ -6,7 +6,7 @@ export async function executeCommand<T>(command: string): Promise<T> {
 			if (stdout != null) {
 				res(stdout);
 			}
-			rej(stderr ?? "No output from command");
+			rej(error?.message ?? stderr ?? "No output from command");
 		});
 	});
 	return response as T;
