@@ -34,7 +34,7 @@ export async function gitCommitAndPush(
 	const commitCommand = `cd ${repoLocation} && git commit -m "${commitMessage}"`;
 	const commitRes = await executeCommand<string>(commitCommand);
 	console.log("commitRes", commitRes);
-	const pushCommand = `cd ${repoLocation} && git push"`;
+	const pushCommand = `cd ${repoLocation} && git push`;
 	const pushRes = await executeCommand<string>(pushCommand);
 	console.log("pushRes", pushRes);
 }
