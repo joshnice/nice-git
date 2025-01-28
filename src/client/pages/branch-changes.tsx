@@ -97,5 +97,3 @@ function ChangeComponent({
 		</div>
 	);
 }
-
-// 32 + 80 + 12 + 12

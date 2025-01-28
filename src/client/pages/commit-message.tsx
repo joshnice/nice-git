@@ -23,7 +23,7 @@ export function CommitMessageComponent() {
 			<textarea
 				value={commitMessage}
 				onChange={handleCommitMessageChange}
-				className="border-solid border-black border w-2/3 resize-none"
+				className="border-solid border-black border w-2/3 resize-none bg-zinc-700"
 				rows={2}
 			/>
 			<button type="button" onClick={handleCreateCommit}>
