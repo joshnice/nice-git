@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	html {
+		@apply text-white;
+		@apply bg-zinc-800;
+		@apply text-lg;
+	}
+}
+
 body {
 	width: 100vw;
 	height: 100vh;

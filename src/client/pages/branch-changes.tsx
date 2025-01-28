@@ -16,44 +16,48 @@ export function BranchChangesComponent() {
 	}
 
 	return (
-		<div className="flex gap-5">
-			<div className="w-1/2">
+		<div className="flex gap-3 h-full w-full">
+			<div className="flex flex-col gap-3 bg-zinc-700 rounded p-4 flex-1">
 				<div className="flex justify-between">
 					<TitleComponent content="Unstaged" />
 					<button type="button" onClick={addAllFileToChanges}>
 						Add all
 					</button>
 				</div>
-				{branchChanges.unstagedChanges.map((change) => (
-					<ChangeComponent
-						key={change.id}
-						add
-						onAddClicked={() => addFileToChanges(change.fileName)}
-						change={change}
-					/>
-				))}
-				{branchChanges.unstagedChanges.length === 0 && (
-					<span className="italic">There are no unstaged changes</span>
-				)}
+				<div className="flex flex-col">
+					{branchChanges.unstagedChanges.map((change) => (
+						<ChangeComponent
+							key={change.id}
+							add
+							onAddClicked={() => addFileToChanges(change.fileName)}
+							change={change}
+						/>
+					))}
+					{branchChanges.unstagedChanges.length === 0 && (
+						<span className="italic">There are no unstaged changes</span>
+					)}
+				</div>
 			</div>
-			<div className="w-1/2">
+			<div className="flex flex-col gap-3 bg-zinc-700 rounded p-4 flex-1">
 				<div className="flex justify-between">
 					<TitleComponent content="Staged" />
 					<button type="button" onClick={removeAllFilesFromChanges}>
 						Remove all
 					</button>
 				</div>
-				{branchChanges.stagedChanges.map((change) => (
-					<ChangeComponent
-						key={change.id}
-						remove
-						onRemovedClicked={() => removeFileFromChanges(change.fileName)}
-						change={change}
-					/>
-				))}
-				{branchChanges.stagedChanges.length === 0 && (
-					<span className="italic">There are no staged changes</span>
-				)}
+				<div className="flex flex-col">
+					{branchChanges.stagedChanges.map((change) => (
+						<ChangeComponent
+							key={change.id}
+							remove
+							onRemovedClicked={() => removeFileFromChanges(change.fileName)}
+							change={change}
+						/>
+					))}
+					{branchChanges.stagedChanges.length === 0 && (
+						<span className="italic">There are no staged changes</span>
+					)}
+				</div>
 			</div>
 		</div>
 	);
@@ -75,21 +79,23 @@ function ChangeComponent({
 	onRemovedClicked,
 }: ChangeComponentProps) {
 	return (
-		<div className="flex gap-3" key={change.id}>
+		<div className="flex w-full" key={change.id}>
 			{add && (
-				<button type="button" onClick={onAddClicked}>
-					Add
+				<button className="w-8" type="button" onClick={onAddClicked}>
+					+
 				</button>
 			)}
 			{remove && (
-				<button type="button" onClick={onRemovedClicked}>
-					Remove
+				<button className="w-8" type="button" onClick={onRemovedClicked}>
+					-
 				</button>
 			)}
 			<span className="w-20 flex-shrink">{change.type}</span>
-			<span className="flex-grow whitespace-nowrap overflow-hidden overflow-ellipsis">
+			<span className="w-[calc(100%-136px)] whitespace-nowrap overflow-hidden overflow-ellipsis">
 				{change.fileName}
 			</span>
 		</div>
 	);
 }
+
+// 32 + 80 + 12 + 12

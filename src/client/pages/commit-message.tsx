@@ -19,7 +19,7 @@ export function CommitMessageComponent() {
 	};
 
 	return (
-		<div className="flex gap-3">
+		<div className="flex gap-3 bg-zinc-600">
 			<textarea
 				value={commitMessage}
 				onChange={handleCommitMessageChange}
