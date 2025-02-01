@@ -17,7 +17,7 @@ export async function gitGetPreviousCommits(
 			const spiltCommit = commitString.split("\n");
 			const commit: GitCommit = {
 				id: spiltCommit[0].replace("commit ", ""),
-				author: spiltCommit[1].replace("Author: ", ""),
+				author: spiltCommit[1].replace("Author: ", "").split("<")[0].trim(),
 				date: new Date(spiltCommit[2].replace("Date:   ", "")),
 				message: spiltCommit[4].trim(),
 			};
