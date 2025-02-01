@@ -17,7 +17,7 @@ export function BranchChangesComponent() {
 
 	return (
 		<div className="flex gap-3 h-full w-full">
-			<div className="flex flex-col gap-3 bg-zinc-700 rounded p-4 flex-1">
+			<div className="flex flex-col gap-3 bg-zinc-800 rounded p-4 flex-1">
 				<div className="flex justify-between">
 					<TitleComponent content="Unstaged" />
 					<button type="button" onClick={addAllFileToChanges}>
@@ -38,7 +38,7 @@ export function BranchChangesComponent() {
 					)}
 				</div>
 			</div>
-			<div className="flex flex-col gap-3 bg-zinc-700 rounded p-4 flex-1">
+			<div className="flex flex-col gap-3 bg-zinc-800 rounded p-4 flex-1">
 				<div className="flex justify-between">
 					<TitleComponent content="Staged" />
 					<button type="button" onClick={removeAllFilesFromChanges}>

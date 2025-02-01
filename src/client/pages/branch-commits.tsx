@@ -4,7 +4,7 @@ import { useBranchCommits } from "../state/commits/branch-commits";
 export function BranchCommitsComponent() {
 	const commits = useBranchCommits();
 	return (
-		<div className="flex h-full flex-col bg-zinc-700 p-4 rounded">
+		<div className="flex h-full flex-col bg-zinc-800 p-4 rounded">
 			<TitleComponent className="flex-shrink-0" content="Commits" />
 			<div className="overflow-auto">
 				{commits?.map((commit) => (

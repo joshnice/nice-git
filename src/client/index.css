@@ -5,7 +5,7 @@
 @layer base {
 	html {
 		@apply text-white;
-		@apply bg-zinc-800;
+		@apply bg-zinc-700;
 		@apply text-lg;
 	}
 }

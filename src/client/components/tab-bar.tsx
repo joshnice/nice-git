@@ -44,12 +44,15 @@ export function TabBarComponent<TTabs extends BaseTabs>({
 	const tabsInOverflowMenu = tabs.slice(numberOfTabs);
 
 	return (
-		<div ref={containerRef} className="w-full h-8 flex justify-start">
+		<div
+			ref={containerRef}
+			className="w-full bg-zinc-800 flex gap-2 justify-start p-2 rounded"
+		>
 			{tabsToShow.map((tab, index) => (
 				<button
 					type="button"
 					onClick={() => onTabClicked(tab.id)}
-					className={`border-2  ${selectedTabId === tab.id ? "bg-red-500" : "bg-white"} h-9 w-48 flex-nowrap overflow-ellipsis overflow-hidden text-lg`}
+					className={`rounded border-2 border-zinc-700 ${selectedTabId === tab.id ? "bg-zinc-500 font-bold" : "bg-zinc-800"} h-9 w-48 flex-nowrap overflow-ellipsis overflow-hidden text-lg`}
 					key={tab.id}
 				>
 					{tab.name}
