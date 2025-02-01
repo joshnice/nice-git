@@ -7,7 +7,7 @@ export async function getGitBranches(repoLocation: string) {
 		);
 		const branchesArray = branches.split(" ");
 		const selectedStatusBranches = branchesArray.flatMap((branchName) => {
-			if (branchName === "") {
+			if (branchName === "" || branchName === "*") {
 				return [];
 			}
 			return [branchName.replace("\n", "").replace("*", "")];
