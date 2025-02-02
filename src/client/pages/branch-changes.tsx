@@ -1,4 +1,4 @@
-import type { FileChange } from "src/types/branch-changes";
+import type { FileChange } from "../../types/branch-changes";
 import { TitleComponent } from "../components/header";
 import { useBranchChanges } from "../state/commits/branch-changes";
 
@@ -17,47 +17,63 @@ export function BranchChangesComponent() {
 
 	return (
 		<div className="flex gap-3 h-full w-full">
-			<div className="flex flex-col gap-3 bg-zinc-800 rounded p-4 flex-1">
-				<div className="flex justify-between">
-					<TitleComponent content="Unstaged" />
-					<button type="button" onClick={addAllFileToChanges}>
-						Add all
-					</button>
-				</div>
-				<div className="flex flex-col">
-					{branchChanges.unstagedChanges.map((change) => (
-						<ChangeComponent
-							key={change.id}
-							add
-							onAddClicked={() => addFileToChanges(change.fileName)}
-							change={change}
-						/>
-					))}
-					{branchChanges.unstagedChanges.length === 0 && (
-						<span className="italic">There are no unstaged changes</span>
-					)}
-				</div>
+			<BranchChangeComponent
+				allChangesButtonText="Add all"
+				allChangesButtonAction={addAllFileToChanges}
+				changes={branchChanges.unstagedChanges}
+				changeAction={(id) => addFileToChanges(id)}
+				changeActionName="+"
+				name="Unstaged"
+			/>
+			<BranchChangeComponent
+				allChangesButtonText="Remove all"
+				allChangesButtonAction={removeAllFilesFromChanges}
+				changes={branchChanges.stagedChanges}
+				changeAction={(id) => removeFileFromChanges(id)}
+				changeActionName="-"
+				name="Staged"
+			/>
+		</div>
+	);
+}
+
+interface BranchChangeProps {
+	allChangesButtonText: string;
+	allChangesButtonAction: () => void;
+	changes: FileChange[];
+	changeAction: (id: string) => void;
+	changeActionName: "+" | "-";
+	name: string;
+}
+
+function BranchChangeComponent({
+	allChangesButtonAction,
+	allChangesButtonText,
+	changeAction,
+	changeActionName,
+	changes,
+	name,
+}: BranchChangeProps) {
+	return (
+		<div className="flex flex-col gap-3 bg-zinc-800 rounded p-4 w-[calc(50%-6px)] flex-grow-0 flex-shrink-0">
+			<div className="flex justify-between">
+				<TitleComponent content={name} />
+				<button type="button" onClick={allChangesButtonAction}>
+					{allChangesButtonText}
+				</button>
 			</div>
-			<div className="flex flex-col gap-3 bg-zinc-800 rounded p-4 flex-1">
-				<div className="flex justify-between">
-					<TitleComponent content="Staged" />
-					<button type="button" onClick={removeAllFilesFromChanges}>
-						Remove all
-					</button>
-				</div>
-				<div className="flex flex-col">
-					{branchChanges.stagedChanges.map((change) => (
-						<ChangeComponent
-							key={change.id}
-							remove
-							onRemovedClicked={() => removeFileFromChanges(change.fileName)}
-							change={change}
-						/>
-					))}
-					{branchChanges.stagedChanges.length === 0 && (
-						<span className="italic">There are no staged changes</span>
-					)}
-				</div>
+			<div className="flex flex-col">
+				{changes.map((change) => (
+					<ChangeComponent
+						key={change.id}
+						change={change}
+						action={() => changeAction(change.name)}
+						actionName={changeActionName}
+					/>
+				))}
+				{changes.length === 0 && (
+					<span className="italic">There are no {name} changes</span>
+				)}
 			</div>
 		</div>
 	);
@@ -65,31 +81,16 @@ export function BranchChangesComponent() {
 
 interface ChangeComponentProps {
 	change: FileChange;
-	add?: boolean;
-	remove?: boolean;
-	onAddClicked?: () => void;
-	onRemovedClicked?: () => void;
+	action: () => void;
+	actionName: "+" | "-";
 }
 
-function ChangeComponent({
-	change,
-	add,
-	onAddClicked,
-	remove,
-	onRemovedClicked,
-}: ChangeComponentProps) {
+function ChangeComponent({ change, actionName, action }: ChangeComponentProps) {
 	return (
 		<div className="flex w-full" key={change.id}>
-			{add && (
-				<button className="w-8" type="button" onClick={onAddClicked}>
-					+
-				</button>
-			)}
-			{remove && (
-				<button className="w-8" type="button" onClick={onRemovedClicked}>
-					-
-				</button>
-			)}
+			<button className="w-8" type="button" onClick={action}>
+				{actionName}
+			</button>
 			<span className="w-20 flex-shrink">{change.type}</span>
 			<span className="w-[calc(100%-136px)] whitespace-nowrap overflow-hidden overflow-ellipsis">
 				{change.fileName}

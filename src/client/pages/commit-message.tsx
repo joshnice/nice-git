@@ -5,9 +5,7 @@ export function CommitMessageComponent() {
 	const createCommit = useCreateCommit();
 	const [commitMessage, setCommitMessage] = useState("");
 
-	const handleCommitMessageChange = (
-		event: ChangeEvent<HTMLTextAreaElement>,
-	) => {
+	const handleCommitMessageChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.value != null && typeof event.target.value === "string") {
 			setCommitMessage(event.target.value);
 		}
@@ -19,14 +17,18 @@ export function CommitMessageComponent() {
 	};
 
 	return (
-		<div className="flex gap-3 bg-zinc-600 commit-messages">
-			<textarea
+		<div className="flex bg-zinc-600 commit-messages">
+			<input
+				type="text"
 				value={commitMessage}
 				onChange={handleCommitMessageChange}
-				className="border-solid border-black border w-2/3 resize-none bg-zinc-800"
-				rows={2}
+				className="bg-zinc-800 p-2 border-2 border-zinc-500 rounded flex-grow flex-shrink resize-none"
 			/>
-			<button type="button" onClick={handleCreateCommit}>
+			<button
+				className="w-40 flex-grow-0 flex-shrink-0 rounded text-left p-3"
+				type="button"
+				onClick={handleCreateCommit}
+			>
 				Commit & Push
 			</button>
 		</div>
