@@ -15,7 +15,6 @@ import { RepoTitleComponent } from "./repo-title-component";
 export function HomePage() {
 	return (
 		<div className="h-full w-full p-5 flex flex-col gap-2 overflow-hidden">
-			<h1 className="text-3xl font-bold underline">Nice git</h1>
 			<RepoSelectorComponent />
 			<div className="flex gap-4 flex-grow">
 				<div className="w-1/3">
