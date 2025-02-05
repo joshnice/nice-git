@@ -67,7 +67,7 @@ function BranchChangeComponent({
 					<ChangeComponent
 						key={change.id}
 						change={change}
-						action={() => changeAction(change.name)}
+						action={() => changeAction(change.fileName)}
 						actionName={changeActionName}
 					/>
 				))}
