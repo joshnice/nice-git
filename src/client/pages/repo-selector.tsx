@@ -44,41 +44,24 @@ export function RepoSelectorComponent() {
 	};
 
 	return (
-		<div className="flex">
+		<>
 			{repos != null && selectedRepoId != null && (
 				<TabBarComponent
 					tabs={repos}
 					selectedTabId={selectedRepoId}
 					onTabClicked={handleRepoSelected}
-				/>
+				>
+					<IconButtonComponent
+						icon={<FontAwesomeIcon icon={["fas", "circle-plus"]} size="2x" />}
+						onClick={addRepo}
+					/>
+					<IconButtonComponent
+						icon={<FontAwesomeIcon icon={["fas", "trash-can"]} size="2x" />}
+						onClick={deleteRepo}
+					/>
+				</TabBarComponent>
 			)}
-			<IconButtonComponent
-				icon={
-					<FontAwesomeIcon
-						icon={["fas", "circle-plus"]}
-						color="red"
-						size="2x"
-					/>
-				}
-				hoverIcon={
-					<FontAwesomeIcon
-						icon={["fas", "circle-plus"]}
-						color="blue"
-						size="2x"
-					/>
-				}
-				onClick={addRepo}
-			/>
-			<IconButtonComponent
-				icon={
-					<FontAwesomeIcon icon={["fas", "trash-can"]} color="red" size="2x" />
-				}
-				hoverIcon={
-					<FontAwesomeIcon icon={["fas", "trash-can"]} color="blue" size="2x" />
-				}
-				onClick={deleteRepo}
-			/>
-		</div>
+		</>
 	);
 }
 

@@ -60,11 +60,11 @@ export function OverFlowMenuComponent<TItem extends BaseItem>({
 				<div
 					ref={containerRef}
 					style={{ top: `${position.top}px`, left: `${position.left}px` }}
-					className="absolute w-60 bg-white border-solid drop-shadow-lg p-2 flex flex-col gap-1 rounded-md border-2 border-gray-300"
+					className="absolute w-60 bg-zinc-800  drop-shadow-lg p-2 flex flex-col gap-1 rounded-md border-2 border-gray-300"
 				>
 					{items.map((item) => (
 						<button
-							className="overflow-hidden whitespace-nowrap overflow-ellipsis w-full text-left hover:bg-sky-200 p-2"
+							className="overflow-hidden whitespace-nowrap overflow-ellipsis w-full text-left hover:bg-zinc-700 p-2 rounded"
 							key={item.id}
 							onClick={() => onClick(item.id)}
 							type="button"

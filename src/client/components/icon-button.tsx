@@ -4,32 +4,23 @@ interface IconButtonProps {
 	icon: ReactNode;
 	onClick: () => void;
 	ref?: RefObject<HTMLButtonElement | null>;
-	hoverIcon?: ReactNode;
 	className?: string;
 }
 
 export function IconButtonComponent({
 	icon,
 	onClick,
-	hoverIcon,
 	className,
 	ref,
 }: IconButtonProps) {
-	const [hover, setHover] = useState(false);
-
-	const showHoverIcon = hoverIcon && hover;
-
 	return (
 		<button
 			ref={ref}
-			className={className}
+			className="text-zinc-400 hover:text-zinc-200"
 			type="button"
 			onClick={onClick}
-			onFocus={() => setHover(true)}
-			onMouseOver={() => setHover(true)}
-			onMouseLeave={() => setHover(false)}
 		>
-			{showHoverIcon ? hoverIcon : icon}
+			{icon}
 		</button>
 	);
 }
