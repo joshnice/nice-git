@@ -1,6 +1,5 @@
-import { removeAllListeners } from "node:process";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSelectedBranch } from "src/git/git-selected-branch";
+import { useEffect } from "react";
 import type { BranchChanges } from "src/types/branch-changes";
 import { useSelectedRepo } from "../repos/selected-repo";
 
@@ -26,9 +25,9 @@ export function useBranchChanges() {
 		},
 	});
 
-	const invalidateBranchChanges = async () => {
+	const invalidateBranchChanges = async (repoId = selectedRepoId) => {
 		await queryClient.invalidateQueries({
-			queryKey: getQueryKey(selectedRepoId),
+			queryKey: getQueryKey(repoId),
 		});
 	};
 
@@ -81,6 +80,15 @@ export function useBranchChanges() {
 		await window.branchChangesApi.delete(selectedRepoId, fileNameChanges);
 		await invalidateBranchChanges();
 	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		console.log("set call back");
+		window.repoBranchesApi.refresh((repoId: string) => {
+			console.log("trigger update");
+			invalidateBranchChanges(repoId);
+		});
+	}, []);
 
 	return {
 		branchChanges,

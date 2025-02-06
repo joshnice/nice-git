@@ -40,6 +40,11 @@ contextBridge.exposeInMainWorld("repoBranchesApi", {
 	list: (repoId: string) => {
 		return ipcRenderer.invoke("repoBranchesApi-list", repoId);
 	},
+	refresh: (callback: (repoId: string) => void) => {
+		ipcRenderer.on("repo-file-changes", (_event, repoId: string) =>
+			callback(repoId),
+		);
+	},
 });
 
 contextBridge.exposeInMainWorld("selectedRepoBranchApi", {

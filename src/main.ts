@@ -19,6 +19,7 @@ import {
 	chooseRepoFromFileSystem,
 	getRepoLocations,
 } from "./repo/repo-location";
+import { RepoWatch } from "./repo/repo-watcher";
 import { isRepoLocationFailure } from "./types/repo-location-types";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -81,12 +82,14 @@ ipcMain.handle("reposApi-list", async () => {
 
 ipcMain.handle("selectedReposApi-get", async () => {
 	const lastSelectedRepo = await SelectedRepoStore.list();
+	RepoWatch.setRepo(lastSelectedRepo, () => {
+		mainWindow.webContents.send("repo-file-changes", lastSelectedRepo);
+	});
 	return lastSelectedRepo;
 });
 
 ipcMain.handle("selectedReposApi-post", async (event, repoId: string) => {
-	const lastSelectedRepo = await SelectedRepoStore.write(repoId);
-	return lastSelectedRepo;
+	await SelectedRepoStore.write(repoId);
 });
 
 /** IPC - Git */
