@@ -62,7 +62,7 @@ function BranchChangeComponent({
 					{allChangesButtonText}
 				</button>
 			</div>
-			<div className="flex flex-col">
+			<div className="flex flex-col overflow-auto">
 				{changes.map((change) => (
 					<ChangeComponent
 						key={change.id}
