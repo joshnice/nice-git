@@ -18,7 +18,7 @@ jobs:
                 aws-region: eu-west-2
 
             - name: Install flatpak
-              run: sudo apt-get flatpak
+              run: sudo apt flatpak
 
             - name: Setup node
               uses: actions/setup-node@v3
