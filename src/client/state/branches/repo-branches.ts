@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelectedRepo } from "../repos/selected-repo";
 
 const getQueryKey = (selectedRepoId: string | null | undefined) => [
@@ -8,6 +8,8 @@ const getQueryKey = (selectedRepoId: string | null | undefined) => [
 
 export function useBranches() {
 	const { selectedRepoId } = useSelectedRepo();
+
+	const queryClient = useQueryClient();
 
 	const { data: branches } = useQuery({
 		queryKey: getQueryKey(selectedRepoId),
@@ -21,5 +23,16 @@ export function useBranches() {
 		},
 	});
 
-	return branches;
+	const createNewBranch = async (branchName: string) => {
+		if (selectedRepoId == null) {
+			throw new Error();
+		}
+
+		await window.repoBranchesApi.post(selectedRepoId, branchName);
+		await queryClient.invalidateQueries({
+			queryKey: getQueryKey(selectedRepoId),
+		});
+	};
+
+	return { branches, createNewBranch };
 }

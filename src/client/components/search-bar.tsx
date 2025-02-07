@@ -1,14 +1,19 @@
 import type { ChangeEvent } from "react";
 
-interface SearchBarProps {
+interface TextInputProps {
 	value: string;
+	placeholder: string;
 	onChange: (searchString: string) => void;
 }
 
-export function SearchBarComponent({ value, onChange }: SearchBarProps) {
+export function TextInputComponent({
+	value,
+	placeholder,
+	onChange,
+}: TextInputProps) {
 	const handleSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
-		const searchString = event.target.value;
-		onChange(searchString);
+		const updatedValue = event.target.value;
+		onChange(updatedValue);
 	};
 
 	return (
@@ -16,7 +21,7 @@ export function SearchBarComponent({ value, onChange }: SearchBarProps) {
 			className="bg-zinc-800 p-2 border-2 border-zinc-500 rounded"
 			type="text"
 			value={value}
-			placeholder="Search"
+			placeholder={placeholder}
 			onChange={handleSearchInput}
 		/>
 	);

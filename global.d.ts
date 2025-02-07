@@ -34,6 +34,7 @@ declare global {
 
 		repoBranchesApi: {
 			list: (selectedRepoId: string) => Promise<string[]>;
+			post: (selectedRepoId: string, branchName: string) => Promise<void>;
 			refresh: (callback: (repoId: string) => void) => void;
 		};
 

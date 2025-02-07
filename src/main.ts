@@ -6,7 +6,7 @@ import { readUserFile } from "./app-data/read-file";
 import { RepoDataStore } from "./data-store/repos/repo-data-store";
 import { SelectedRepoStore } from "./data-store/repos/selected-repo-store";
 import { gitAddFiles } from "./git/git-add";
-import { getGitBranches } from "./git/git-branches";
+import { createGitBranch, getGitBranches } from "./git/git-branches";
 import { gitCommitAndPush, gitGetPreviousCommits } from "./git/git-commits";
 import { gitRemoveFileFromStaged } from "./git/git-restore";
 import {
@@ -111,6 +111,18 @@ ipcMain.handle("repoBranchesApi-list", async (event, repoId: string) => {
 	const branches = await getGitBranches(repo?.location);
 	return branches;
 });
+
+ipcMain.handle(
+	"repoBranchesApi-post",
+	async (event, repoId: string, branchName: string) => {
+		const repo = await RepoDataStore.get(repoId);
+
+		if (repo == null) {
+			throw new Error(`Repo can't be found with id ${repoId}`);
+		}
+		await createGitBranch(repo.location, branchName);
+	},
+);
 
 ipcMain.handle("selectedRepoBranchApi-get", async (event, repoId: string) => {
 	const repo = await RepoDataStore.get(repoId);

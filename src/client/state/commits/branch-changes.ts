@@ -83,9 +83,7 @@ export function useBranchChanges() {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
-		console.log("set call back");
 		window.repoBranchesApi.refresh((repoId: string) => {
-			console.log("trigger update");
 			invalidateBranchChanges(repoId);
 		});
 	}, []);

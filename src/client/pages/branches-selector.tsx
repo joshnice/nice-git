@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { SearchBarComponent } from "../components/search-bar";
+import { TextInputComponent } from "../components/search-bar";
 import { useBranches } from "../state/branches/repo-branches";
 import { useSelectedBranch } from "../state/branches/selected-branch";
+import { BranchActionsComponent } from "./branch-actions";
 
 export function BranchesSelectorComponent() {
-	const branches = useBranches();
+	const { branches } = useBranches();
 	const { selectedBranch, setSelectedBranch } = useSelectedBranch();
 
 	const [searchString, setSearchString] = useState("");
@@ -28,8 +29,10 @@ export function BranchesSelectorComponent() {
 
 	return (
 		<div className="w-full h-full bg-zinc-800 rounded p-2 flex flex-col gap-4">
-			<SearchBarComponent
+			<BranchActionsComponent />
+			<TextInputComponent
 				value={searchString}
+				placeholder="Search"
 				onChange={handleSearchStringChange}
 			/>
 			<div className=" flex flex-col gap-2 ">

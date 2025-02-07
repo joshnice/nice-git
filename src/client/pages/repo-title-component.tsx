@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { TitleComponent } from "../components/header";
-import { useBranches } from "../state/branches/repo-branches";
 import { useSelectedBranch } from "../state/branches/selected-branch";
 import { useRepos } from "../state/repos/repos";
 import { useSelectedRepo } from "../state/repos/selected-repo";
