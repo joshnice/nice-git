@@ -15,8 +15,3 @@
 	scrollbar-color: rgb(113 113 122 / var(--tw-bg-opacity, 1))
 		rgb(39 39 42 / var(--tw-bg-opacity, 1));
 }
-
-body {
-	width: 100vw;
-	height: 100vh;
-}
